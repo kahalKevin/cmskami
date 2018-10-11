@@ -21,7 +21,7 @@
                             <h2>User :</h2>   
                         </td>
                         <td>
-                            <h2><strong>Kevin</strong></h2>    
+                            <h2><strong>{{ Auth::user()->_full_name }}</strong></h2>    
                         </td>
                     </tr>
                     <tr>

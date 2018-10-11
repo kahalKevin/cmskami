@@ -11,6 +11,7 @@
 |
 */
 \Route::group(['middleware' => 'auth'], function () {
+Route::get('logout', 'Auth\LoginController@logout');	
 Route::get('/', function () {
 		    return view('index');
 		});
@@ -66,10 +67,6 @@ Route::get('/', function () {
 		});			
 	});
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
