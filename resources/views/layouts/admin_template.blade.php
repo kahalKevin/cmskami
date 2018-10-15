@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CMS Kita</title>
+    <title>SuperStore CMS</title>
     <meta name="description" content="CMS KIta - Kevin">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
