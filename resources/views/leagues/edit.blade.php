@@ -3,13 +3,13 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-12">
-		<h2><strong>Create</strong> Master Date - Size</h2>			
+		<h2><strong>Update</strong> Master Date - League</h2>			
 	</div>
 </div>
 
 <div class="row">
     <div class="col-sm-12">
-                @include('sizes.form')
+                @include('leagues.form')
     </div>    
 </div>
 @endsection

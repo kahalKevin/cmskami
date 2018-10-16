@@ -52,8 +52,4 @@ class User extends Authenticatable {
     {
         return "_remember_token";
     }    
-    public function scopeActive($query)
-    {
-        return $query->where('_active', '=', 1);
-    }
 }

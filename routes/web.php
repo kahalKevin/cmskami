@@ -18,47 +18,26 @@ Route::get('/', function () {
 });
 
 Route::get('master-data/users/load-data', 'UserController@loadData');
+Route::get('master-data/sizes/load-data', 'SizeController@loadData');
+Route::get('master-data/leagues/load-data', 'LeagueController@loadData');
+Route::get('master-data/sleeves/load-data', 'SleeveController@loadData');
+Route::get('master-data/clubs/load-data', 'ClubController@loadData');
+
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
-	Route::post('/users/resetPassword/{id}', 'UserController@resetPassword');	
-	\Route::group(['prefix' => 'clubs'], function () {
-		Route::get('/', function () {
-		    return view('clubs.index');
-		});
-		Route::get('/create', function () {
-		    return view('clubs.create');
-		});			
-	});
-	\Route::group(['prefix' => 'leagues'], function () {
-		Route::get('/', function () {
-		    return view('leagues.index');
-		});
-		Route::get('/create', function () {
-		    return view('leagues.create');
-		});			
-	});	
+	Route::post('/users/resetPassword/{id}', 'UserController@resetPassword');
+
+	Route::resource('/sizes', 'SizeController');
+	Route::resource('/leagues', 'LeagueController');
+	Route::resource('/sleeves', 'SleeveController');
+	Route::resource('/clubs', 'ClubController');
+		
 	\Route::group(['prefix' => 'players'], function () {
 		Route::get('/', function () {
 		    return view('players.index');
 		});
 		Route::get('/create', function () {
 		    return view('players.create');
-		});			
-	});
-	\Route::group(['prefix' => 'sizes'], function () {
-		Route::get('/', function () {
-		    return view('sizes.index');
-		});
-		Route::get('/create', function () {
-		    return view('sizes.create');
-		});			
-	});
-	\Route::group(['prefix' => 'sleeves'], function () {
-		Route::get('/', function () {
-		    return view('sleeves.index');
-		});
-		Route::get('/create', function () {
-		    return view('sleeves.create');
 		});			
 	});
 });
