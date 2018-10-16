@@ -29,7 +29,7 @@
                             <h2>Last Login :</h2>    
                         </td>
                         <td>
-                            <h2><strong>15 Sept 2018 21:01;03</strong></h2>    
+                            <h2><strong>{{ \Carbon\Carbon::parse(Auth::user()->_last_login_at)->format('d M Y h:m:s')}}</strong></h2>    
                         </td>
                     </tr>
                     <tr>

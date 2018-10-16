@@ -17,15 +17,10 @@ Route::get('/', function () {
 		});
 });
 
+Route::get('master-data/users/load-data', 'UserController@loadData');
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
-	\Route::group(['prefix' => 'users'], function () {
-		Route::get('/', function () {
-		    return view('users.index');
-		});
-		Route::get('/create', function () {
-		    return view('users.create');
-		});			
-	});
+	Route::resource('/users', 'UserController');
+	Route::post('/users/resetPassword/{id}', 'UserController@resetPassword');	
 	\Route::group(['prefix' => 'clubs'], function () {
 		Route::get('/', function () {
 		    return view('clubs.index');
@@ -69,5 +64,5 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+

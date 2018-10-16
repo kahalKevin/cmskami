@@ -29,7 +29,9 @@ class User extends Authenticatable {
         '_initial_name',
         '_phone',
         '_address',
-        '_active'
+        '_active',
+        '_last_login_at',
+        '_last_login_ip'
     ];
 
     /**
@@ -50,4 +52,8 @@ class User extends Authenticatable {
     {
         return "_remember_token";
     }    
+    public function scopeActive($query)
+    {
+        return $query->where('_active', '=', 1);
+    }
 }
