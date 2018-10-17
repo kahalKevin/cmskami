@@ -28,10 +28,10 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="_email" class="control-label mb-1">League</label>
+                                <label for="league_id" class="control-label mb-1">League</label>
                                 <select class="form-control" name="league_id">
                                 @foreach($leagues as $league)
-                                <option value="{{ $league->id }}">{{ $league->_name }}</option>
+                                <option value="{{ $league->id }}" {{ isset($clubs) && $clubs->league_id == $league->id ? 'selected' : '' }}>{{ $league->_name }}</option>
                                 @endforeach
                               </select>
                             </div>

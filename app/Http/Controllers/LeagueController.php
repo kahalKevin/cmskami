@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Model\League as League;
+use App\Http\Model\Club as Club;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Redirect;
@@ -116,5 +117,10 @@ class LeagueController extends Controller
         }
                 
         return Datatables::of(League::query()->where('_active', '=' , $status))->addIndexColumn()->make(true);
+    }
+
+    public function getClubs($id) {
+        $clubs = Club::query()->where("league_id",$id)->pluck("_name","id");
+        return json_encode($clubs);
     }
 }
