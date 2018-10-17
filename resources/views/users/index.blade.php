@@ -26,7 +26,12 @@
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3"><label for="status" class=" form-control-label">Active?</label></div>
-                        <div class="col-12 col-md-9"><input id="status" name="status" class="form-control"></div>
+                        <div class="col-12 col-md-9">
+                          <select class="form-control" name="status">
+                            <option value="1" {{ $request->status == 1 ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ $request->status == 0 ? 'selected' : '' }}>No</option>
+                          </select>
+                        </div>
                     </div>
 
                     <div>
@@ -59,31 +64,28 @@
               </table>
           <script>
            $(function() {
+                 var url_clean = "{{ url('master-data/users/load-data?keywordSearch='. $request->keyword . '&status='. $request->status) }}"
+                 var fix_url = url_clean.replace(/&amp;/g, '&');
                  $('#table').DataTable({
                  processing: true,
                  serverSide: true,
                  searching: false,
-                 // ajax:{
-                 //    url: "{{ url('master-data/users/load-data?keywordSearch='. $request->keyword) }}",
-                 //    type: "GET",
-                 //    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-                 // },
-                 ajax: "{{ url('master-data/users/load-data?keywordSearch='. $request->keyword) }}",
+                 ajax: fix_url,
                  columns: [
-                          { data: 'id', defaultContent: '' },
-                          { data: '_email', name: '_email' },
-                          { data: '_full_name', name: '_full_name' },
-                          { data: '_phone', name: '_phone' },
-                          { data: '_active', name: '_active' },
-                          {
-                            mRender: function (data, type, row) {
-                                return '<center>' +
-                                '<a href=users/' + row.id + '/edit class="btn btn-primary"role="button">View & Edit<a> ' +
-                                '<a href="javascript:checkDelete('+ row.id +');" class="btn btn-danger"role="button">Delete<a> ' +
-                                '<a href="javascript:checkResetPassword('+ row.id +');" class="btn btn-warning"role="button">Reset Password<a></center>'
-                            }
-                          }                   
-                       ]
+                            { data: 'id', defaultContent: '' },
+                            { data: '_email', name: '_email' },
+                            { data: '_full_name', name: '_full_name' },
+                            { data: '_phone', name: '_phone' },
+                            { data: '_active', name: '_active' },
+                            {
+                              mRender: function (data, type, row) {
+                                  return '<center>' +
+                                  '<a href=users/' + row.id + '/edit class="btn btn-primary"role="button">View & Edit<a> ' +
+                                  '<a href="javascript:checkDelete('+ row.id +');" class="btn btn-danger"role="button">Delete<a> ' +
+                                  '<a href="javascript:checkResetPassword('+ row.id +');" class="btn btn-warning"role="button">Reset Password<a></center>'
+                              }
+                            }                   
+                         ]
               });
            });
           </script>

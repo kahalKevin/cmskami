@@ -22,6 +22,8 @@ Route::get('master-data/sizes/load-data', 'SizeController@loadData');
 Route::get('master-data/leagues/load-data', 'LeagueController@loadData');
 Route::get('master-data/sleeves/load-data', 'SleeveController@loadData');
 Route::get('master-data/clubs/load-data', 'ClubController@loadData');
+Route::get('master-data/players/load-data', 'PlayerController@loadData');
+Route::get('master-data/leagues/get-clubs/{id}', 'LeagueController@getClubs');
 
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
@@ -31,15 +33,7 @@ Route::get('master-data/clubs/load-data', 'ClubController@loadData');
 	Route::resource('/leagues', 'LeagueController');
 	Route::resource('/sleeves', 'SleeveController');
 	Route::resource('/clubs', 'ClubController');
-		
-	\Route::group(['prefix' => 'players'], function () {
-		Route::get('/', function () {
-		    return view('players.index');
-		});
-		Route::get('/create', function () {
-		    return view('players.create');
-		});			
-	});
+	Route::resource('/players', 'PlayerController');
 });
 
 Auth::routes();

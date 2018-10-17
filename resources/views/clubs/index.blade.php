@@ -24,6 +24,7 @@
                         <div class="col col-md-3"><label for="league" class=" form-control-label">League</label></div>
                         <div class="col-12 col-md-9">
                           <select class="form-control" name="league">
+                          <option value="">--- League ---</option>
                             @foreach($leagues as $league)
                             <option value="{{ $league->id }}" {{ $request->league == $league->id? 'selected' : '' }}>{{ $league->_name }}</option>
                             @endforeach
@@ -52,7 +53,7 @@
     <div class="col-sm-12">
         <div class="card">  
             <div class="card-header">
-                <strong class="card-title">List </strong>User
+                <strong class="card-title">List </strong>Club
             </div>
             <div class="card-body">
               <table class="table table-bordered" id="table">
@@ -75,11 +76,6 @@
                  processing: true,
                  serverSide: true,
                  searching: false,
-                 // ajax:{
-                 //    url: "{{ url('master-data/users/load-data?keywordSearch='. $request->keyword) }}",
-                 //    type: "GET",
-                 //    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-                 // },
                  ajax: fix_url,
                  columns: [
                           { data: 'id', defaultContent: '' },
@@ -90,9 +86,9 @@
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +
-                                '<a href=users/' + row.id + '/edit class="btn btn-primary"role="button">View & Edit<a> ' +
+                                '<a href=clubs/' + row.id + '/edit class="btn btn-primary"role="button">View & Edit<a> ' +
                                 '<a href="javascript:checkDelete('+ row.id +');" class="btn btn-danger"role="button">Delete<a> ' +
-                                '<a href="javascript:checkResetPassword('+ row.id +');" class="btn btn-warning"role="button">Reset Password<a></center>'
+                                '</center>'
                             }
                           }                   
                        ]
@@ -113,7 +109,7 @@
         });
         $.ajax({
           type: "DELETE",
-          url: 'users/' + id,
+          url: 'clubs/' + id,
           success: function(result) {
              location.reload();
           }

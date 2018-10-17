@@ -51,8 +51,8 @@ class ClubController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, $this->rules);
-        $size = Club::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
-        return back()->with('success', 'You have just created new Size');
+        $club = Club::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
+        return back()->with('success', 'You have just created new Club');
     }
 
     /**
@@ -74,7 +74,9 @@ class ClubController extends Controller
      */
     public function edit($id)
     {
-
+        $clubs = Club::find($id);
+		$leagues = League::query()->where('_active', '=' , '1')->get();
+        return view('clubs.edit')->with(compact('leagues', 'clubs'));
     }
 
     /**
@@ -86,7 +88,14 @@ class ClubController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        $this->validate($request, $this->rules);
+        $club = Club::find($id);
+            $club->league_id = $request->league_id;        
+            $club->_name = $request->_name;
+            $club->_desc = $request->_desc;
+            $club->updated_by =  Auth::user()->id;
+        $club->save();
+        return back()->with('success', 'You have just update '. $club->_name);
     }
 
     /**
@@ -97,7 +106,9 @@ class ClubController extends Controller
      */
     public function destroy($id)
     {
-
+        $club = Club::find($id);
+        $club->_active = '0';
+        $club->save();
     }
 
     public function loadData(Request $request)
@@ -107,7 +118,7 @@ class ClubController extends Controller
         } else {
             $status = $request->status;
         }
-        $clubs = Club::join('cms_tm_league','cms_tm_club.league_id','cms_tm_league.id')
+        $query = Club::join('cms_tm_league','cms_tm_club.league_id','cms_tm_league.id')
          ->select(
          		  'cms_tm_club.id',
                   'cms_tm_league._name AS league_name',
@@ -118,9 +129,11 @@ class ClubController extends Controller
               $q->where('cms_tm_club._name','LIKE', '%'.$request->keywordSearch.'%')
                 ->orWhere('cms_tm_club._desc','LIKE', '%'.$request->keywordSearch.'%');
               })
-            ->where('cms_tm_club._active', '=' , $status)
-            ->where('cms_tm_club.league_id', '=' , $request->leagueId)
-         ->get();
-        return Datatables::of($clubs)->addIndexColumn()->make(true);
+            ->where('cms_tm_club._active', '=' , $status);
+
+        if (isset($request->leagueId))
+            $query->where('cms_tm_club.league_id', '=' , $request->leagueId);
+        
+        return Datatables::of($query->get())->addIndexColumn()->make(true);
     }
 }
