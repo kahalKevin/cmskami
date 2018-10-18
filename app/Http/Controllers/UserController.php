@@ -55,7 +55,7 @@ class UserController extends Controller
             $user->_password = bcrypt($request->_password);
             $user->_full_name  = $request->_fullname;
             $user->_phone = $request->_phone;
-            $user->_active = 1;
+            $user->_active = '1';
         $user->save();
         return back()->with('success', 'You have just created new user');
     }
@@ -124,20 +124,24 @@ class UserController extends Controller
 
     public function loadData(Request $request)
     {   
-        if(!isset($request->status)) {
-            $status = '1';       
-        } else {
-            $status = $request->status;
+
+        $query = User::query()
+        ->where(function($q) use ($request) {
+          $q->where('_email','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('_phone','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('_full_name', 'LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('_password', 'LIKE', '%'.$request->keywordSearch.'%');
+          });
+
+        if(isset($request->status)) {
+            $status = '1';
+            if($request->status == 'false'){
+                $status = '0';
+            }
+            $query = $query->where('_active', '=' , $status);
         }
                 
-        return Datatables::of(User::query()
-            ->where(function($q) use ($request) {
-              $q->where('_email','LIKE', '%'.$request->keywordSearch.'%')
-                ->orWhere('_phone','LIKE', '%'.$request->keywordSearch.'%')
-                ->orWhere('_full_name', 'LIKE', '%'.$request->keywordSearch.'%')
-                ->orWhere('_password', 'LIKE', '%'.$request->keywordSearch.'%');
-              })
-            ->where('_active', '=' , $status)
+        return Datatables::of($query
         )->addIndexColumn()->make(true);
     }
 

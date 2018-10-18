@@ -28,8 +28,9 @@
                         <div class="col col-md-3"><label for="status" class=" form-control-label">Active?</label></div>
                         <div class="col-12 col-md-9">
                           <select class="form-control" name="status">
-                            <option value="1" {{ $request->status == 1 ? 'selected' : '' }}>Yes</option>
-                            <option value="0" {{ $request->status == 0 ? 'selected' : '' }}>No</option>
+                            <option value="" {{ !isset($request->status) ? 'selected' : '' }}>Please Select</option>
+                            <option value="true" {{ $request->status == 'true' ? 'selected' : '' }}>Yes</option>
+                            <option value="false" {{ $request->status == 'false' ? 'selected' : '' }}>No</option>
                           </select>
                         </div>
                     </div>
