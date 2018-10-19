@@ -12,6 +12,9 @@
   </div>
 </div>
 <hr>
+@if(Session::has('flash_message'))
+    <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>
+@endif
 <div class="row">
     <div class="col-lg-6">
         <div class="card">
@@ -50,7 +53,13 @@
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3"><label for="status" class=" form-control-label">Active?</label></div>
-                        <div class="col-12 col-md-9"><input id="status" name="status" class="form-control"></div>
+                        <div class="col-12 col-md-9">
+                          <select class="form-control" name="status">
+                            <option value="" {{ !isset($request->status) ? 'selected' : '' }}>Please Select</option>
+                            <option value="true" {{ $request->status == 'true' ? 'selected' : '' }}>Yes</option>
+                            <option value="false" {{ $request->status == 'false' ? 'selected' : '' }}>No</option>
+                          </select>
+                        </div>
                     </div>
 
                     <div>
@@ -84,7 +93,7 @@
               </table>
           <script>
            $(function() {
-                var url_clean = "{{ url('master-data/players/load-data?keywordSearch='. $request->keyword . '&leagueId='. $request->league_id. '&clubId='. $request->club_id) }}"
+                var url_clean = "{{ url('master-data/players/load-data?keywordSearch='. $request->keyword . '&leagueId='. $request->league_id. '&clubId='. $request->club_id . '&status='. $request->status) }}"
                 var fix_url = url_clean.replace(/&amp;/g, '&');
                  $('#table').DataTable({
                  processing: true,
@@ -97,7 +106,15 @@
                           { data: 'league_name', name: 'league_name' },
                           { data: 'club_name', name: 'club_name' },
                           { data: '_number_shirt', name: '_number_shirt' },
-                          { data: '_active', name: '_active' },
+                          {
+                              mRender: function (data, type, row) {
+                              if (row._active == '1') {
+                                    return '<i class="fa fa-check-square"></i> Active'
+                                } else {
+                                    return '<i class="fa fa-square-o"></i> Not active'
+                                }
+                              }                            
+                          },
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +

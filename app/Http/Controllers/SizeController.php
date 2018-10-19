@@ -47,8 +47,10 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, $this->rules);
-        $size = Size::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
-        return back()->with('success', 'You have just created new Size');
+        $size = Size::create($request->all() + ['created_by' =>  Auth::user()->id]);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just created new size.');
+        return redirect()->route("sizes.index");
     }
 
     /**
@@ -88,8 +90,10 @@ class SizeController extends Controller
         $size = Size::find($id);
             $size->_name = $request->_name;
             $size->_desc = $request->_desc;
+            $size->_active = $request->_active;
         $size->save();
-        return back()->with('success', 'You have just update '. $size->_name);
+        \Session::flash('flash_message', 'You have just update '. $size->_name);
+        return redirect()->route("sizes.index");        
     }
 
     /**
@@ -103,6 +107,8 @@ class SizeController extends Controller
         $size = Size::find($id);
         $size->_active = '0';
         $size->save();
+        \Session::flash('flash_message', 'You have just delete '. $size->_name);
+        return redirect()->route("sizes.index");          
     }
 
     public function loadData(Request $request)
@@ -113,6 +119,8 @@ class SizeController extends Controller
             $status = $request->status;
         }
                 
-        return Datatables::of(Size::query()->where('_active', '=' , $status))->addIndexColumn()->make(true);
+        return Datatables::of(Size::query()
+        //    ->where('_active', '=' , $status)
+        )->addIndexColumn()->make(true);
     }
 }

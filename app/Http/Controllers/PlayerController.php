@@ -54,8 +54,10 @@ class PlayerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, $this->rules);
-        $player = Player::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
-        return back()->with('success', 'You have just created new Player');
+        $player = Player::create($request->all() + ['created_by' =>  Auth::user()->id]);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just created new Player.');
+        return redirect()->route("players.index");        
     }
 
     /**
@@ -99,9 +101,12 @@ class PlayerController extends Controller
             $player->club_id = $request->club_id;        
             $player->_name = $request->_name;
             $player->_number_shirt = $request->_number_shirt;
+            $player->_active = $request->_active;
             $player->updated_by =  Auth::user()->id;
         $player->save();
-        return back()->with('success', 'You have just update '. $player->_name);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just update '. $player->_name);
+        return redirect()->route("players.index");             
     }
 
     /**
@@ -115,6 +120,7 @@ class PlayerController extends Controller
         $player = Player::find($id);
         $player->_active = '0';
         $player->save();
+        \Session::flash('flash_message','You have just update '. $player->_name);
     }
 
     public function loadData(Request $request)
@@ -136,8 +142,16 @@ class PlayerController extends Controller
           )->where(function($q) use ($request) {
               $q->where('cms_tm_player._name','LIKE', '%'.$request->keywordSearch.'%')
                 ->orWhere('cms_tm_player._number_shirt','LIKE', '%'.$request->keywordSearch.'%');
-              })
-            ->where('cms_tm_player._active', '=' , $status);
+              });
+            
+            if(isset($request->status)) {
+                $status = '1';
+                if($request->status == 'false'){
+                    $status = '0';
+                }
+                $query = $query->where('cms_tm_player._active', '=' , $status);
+            }
+            
             if (isset($request->leagueId))
                 $query->where('cms_tm_club.league_id', '=' , $request->leagueId);
             if (isset($request->clubId))
