@@ -12,6 +12,9 @@
   </div>
 </div>
 <hr>
+@if(Session::has('flash_message'))
+    <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>
+@endif
 <div class="row">
     <div align="right" class="col-sm-12">
         <button type="button" class="btn btn-success" onclick="location.href='{{ url('master-data/leagues/create') }}'"><strong>Add New</strong></button>
@@ -44,7 +47,15 @@
                           { data: 'id', defaultContent: '' },
                           { data: '_name', name: '_name' },
                           { data: '_desc', name: '_desc' },
-                          { data: '_active', name: '_active' },
+                          {
+                              mRender: function (data, type, row) {
+                              if (row._active == '1') {
+                                    return '<i class="fa fa-check-square"></i> Active'
+                                } else {
+                                    return '<i class="fa fa-square-o"></i> Not active'
+                                }
+                              }                            
+                          },
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +

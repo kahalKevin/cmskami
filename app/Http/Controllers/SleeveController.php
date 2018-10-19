@@ -47,8 +47,10 @@ class SleeveController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, $this->rules);
-        $sleeve = Sleeve::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
-        return back()->with('success', 'You have just created new Sleeve');
+        $sleeve = Sleeve::create($request->all() + ['created_by' =>  Auth::user()->id]);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just created new Sleeve.');
+        return redirect()->route("sleeves.index");        
     }
 
     /**
@@ -88,8 +90,11 @@ class SleeveController extends Controller
         $sleeve = Sleeve::find($id);
             $sleeve->_name = $request->_name;
             $sleeve->_desc = $request->_desc;
+            $sleeve->_active = $request->_active;
         $sleeve->save();
-        return back()->with('success', 'You have just update '. $sleeve->_name);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just update '. $sleeve->_name);
+        return redirect()->route("sleeves.index");              
     }
 
     /**
@@ -103,6 +108,7 @@ class SleeveController extends Controller
         $sleeve = Sleeve::find($id);
         $sleeve->_active = '0';
         $sleeve->save();
+        \Session::flash('flash_message','You have just delete '. $sleeve->_name);
     }
 
     public function loadData(Request $request)
@@ -113,6 +119,8 @@ class SleeveController extends Controller
             $status = $request->status;
         }
                 
-        return Datatables::of(Sleeve::query()->where('_active', '=' , $status))->addIndexColumn()->make(true);
+        return Datatables::of(Sleeve::query()
+            //->where('_active', '=' , $status)
+            )->addIndexColumn()->make(true);
     }
 }
