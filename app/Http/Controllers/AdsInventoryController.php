@@ -17,6 +17,7 @@ class AdsInventoryController extends Controller
 {    
     protected $rules = array(
             'banner_type_id' => 'required',
+            '_image_alt' => 'required',
             '_start_date' => 'required',
             '_end_date' => 'required',
             '_title'         => 'required',
@@ -42,7 +43,7 @@ class AdsInventoryController extends Controller
      */
     public function index(Request $request)
     {
-        return view('adsbanners.index')->with('request', $request);
+        return view('adsbanner.index')->with('request', $request);
     }
 
     /**
@@ -53,9 +54,8 @@ class AdsInventoryController extends Controller
     public function create()
     {
         $banner_type = Type::query()->where('category_id', 34)->get();
-        return view('adsbanners.create')->with(compact('banner_type'));
+        return view('adsbanner.create')->with(compact('banner_type'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -85,8 +85,8 @@ class AdsInventoryController extends Controller
             '_image_url' => '/storage/images/adsbanner/'.$imageId.'.'.$extension, 
             '_position' =>  '0'
         ]);
-        \Session::flash('flash_message','You have just created new Home Banner.');
-        return redirect()->route('home.index');
+        \Session::flash('flash_message','You have just created new Ads/Inventory Banner.');
+        return redirect()->route('adsInventory.index');
     }
 
     public function loadData(Request $request)
@@ -94,6 +94,59 @@ class AdsInventoryController extends Controller
         return Datatables::of(AdsBanner::query()->where('_active', '=' , '1'))->addIndexColumn()->make(true);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+         // get the nerd
+        $adsbanner = AdsBanner::find($id);
+
+        // show the edit form and pass the nerd
+        return view('adsInventory.edit')->with('adsbanner', $adsbanner);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        request()->validate([
+                '_upload_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);        
+        $this->validate($request, $this->rules);
+        $adsbanner = AdsBanner::find($id);
+        $adsbanner->_title = $request->_title;        
+        $adsbanner->_href_url = $request->_href_url;
+        $adsbanner->_href_open_type = $request->_href_open_type;
+        $adsbanner->_desc = $request->_desc;
+        $adsbanner->updated_by =  Auth::user()->id;
+
+        if($request->hasFile('_upload_image')){
+            $banner = $request->file('_upload_image');
+            $imageId = uniqid();
+            $extension = $banner->getClientOriginalExtension();
+            $imageName = $banner->getClientOriginalName();
+            if(!Storage::disk('adsbanner')->put($imageId.'.'.$extension,  File::get($banner))){
+                dd(false);
+            }
+            unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));
+            $adsbanner->_image_real_name = $imageName;
+            $adsbanner->_image_enc_name = $imageId.'.'.$extension;
+            $adsbanner->_image_url = '/storage/images/adsbanner/'.$imageId.'.'.$extension;
+        }
+
+        $adsbanner->save();
+        \Session::flash('flash_message','You have just update '. $adsbanner->_image_real_name);
+        return redirect()->route("adsInventory.index");
+    }
 
             
 }

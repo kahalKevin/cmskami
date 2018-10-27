@@ -11,6 +11,7 @@ class AdsBanner extends Model {
 
     protected $fillable = [
         'banner_type_id',
+        '_image_alt',
         '_start_date',
         '_end_date',
         '_image_url',
