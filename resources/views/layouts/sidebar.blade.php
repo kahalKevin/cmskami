@@ -29,10 +29,10 @@
                             <li><i class="fa fa-table"></i><a href="tables-data.html">Contact Us</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item-has-children dropdown">
+                    <li class="menu-item-has-children dropdown {{ (Request::is('category-product') || Request::is('category-product/*') ? 'active' : '') }}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Category & Product</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Category</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/category-product/category') }}">Category</a></li>
                             <li><i class="fa fa-table"></i><a href="tables-data.html">Product</a></li>
                         </ul>
                     </li>
