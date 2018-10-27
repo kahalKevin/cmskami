@@ -51,7 +51,7 @@ class HomebannerController extends Controller
     public function create()
     {
         return view('homebanners.create');
-    }    
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -81,7 +81,8 @@ class HomebannerController extends Controller
             '_image_url' => '/storage/images/homebanner/'.$imageId.'.'.$extension, 
             '_position' =>  '0'
         ]);
-        return back()->with('success', 'You have just created new Home Banner');
+        \Session::flash('flash_message','You have just created new Home Banner.');
+        return redirect()->route('home.index');
     }
 
     public function loadData(Request $request)
@@ -139,7 +140,8 @@ class HomebannerController extends Controller
         }
 
         $homebanner->save();
-        return back()->with('success', 'You have just update '. $homebanner->_name);
+        \Session::flash('flash_message','You have just update '. $homebanner->_image_real_name);
+        return redirect()->route("home.index");
     }
 
     /**
@@ -154,5 +156,6 @@ class HomebannerController extends Controller
         $homebanner->_active = '0';
         $homebanner->save();
         unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));    
+        \Session::flash('flash_message','You have just update '. $homebanner->_image_real_name);
     }    
 }
