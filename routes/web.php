@@ -25,6 +25,10 @@ Route::get('master-data/clubs/load-data', 'ClubController@loadData');
 Route::get('master-data/players/load-data', 'PlayerController@loadData');
 Route::get('master-data/leagues/get-clubs/{id}', 'LeagueController@getClubs');
 
+Route::get('category-product/category/load-data', 'CategoryController@loadData');
+Route::get('category-product/category/get-category-child/{id}', 'CategoryController@getCategoryChild');
+
+
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
 	Route::post('/users/resetPassword/{id}', 'UserController@resetPassword');
@@ -34,6 +38,10 @@ Route::get('master-data/leagues/get-clubs/{id}', 'LeagueController@getClubs');
 	Route::resource('/sleeves', 'SleeveController');
 	Route::resource('/clubs', 'ClubController');
 	Route::resource('/players', 'PlayerController');
+});
+
+\Route::group(['prefix' => 'category-product', 'middleware' => 'auth'], function () {
+	Route::resource('/category', 'CategoryController');
 });
 
 Route::get('web-management/home/load-data', 'HomeBannerController@loadData');

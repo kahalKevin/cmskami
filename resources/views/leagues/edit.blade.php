@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-12">
-		<h2><strong>Update</strong> Master Date - League</h2>			
+		<h2><strong>Update</strong> Master Data - League</h2>			
 	</div>
 </div>
 
