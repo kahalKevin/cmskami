@@ -21,12 +21,12 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Website Management</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Home Banner</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-data.html">Ads Banner/Inventory Banner</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Privacy Policy</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-data.html">Term of Use</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">About Us</a></li>
-                            <li><i class="fa fa-table"></i><a href="tables-data.html">Contact Us</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/home') }}">Home Banner</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/adsInventory') }}">Ads Banner/Inventory Banner</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/privacyPolicy') }}">Privacy Policy</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/termUser') }}">Term of Use</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/aboutUs') }}">About Us</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/web-management/contactUs') }}">Contact Us</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
