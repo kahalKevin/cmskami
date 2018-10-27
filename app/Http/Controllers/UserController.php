@@ -55,9 +55,11 @@ class UserController extends Controller
             $user->_password = bcrypt($request->_password);
             $user->_full_name  = $request->_fullname;
             $user->_phone = $request->_phone;
-            $user->_active = '1';
+            $user->_active = $request->_active;;
         $user->save();
-        return back()->with('success', 'You have just created new user');
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just created new user.');
+        return redirect()->route("users.index");
     }
 
     /**
@@ -104,9 +106,11 @@ class UserController extends Controller
             $user->_email = $request->_email;
             $user->_full_name  = $request->_fullname;
             $user->_phone = $request->_phone;
-            $user->_active = 1;
+            $user->_active = $request->_active;
         $user->save();
-        return back()->with('success', 'You have just update '. $user->_full_name);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just update '. $user->_full_name);
+        return redirect()->route("users.index");
     }
 
     /**
@@ -120,6 +124,8 @@ class UserController extends Controller
         $user = User::find($id);
         $user->_active = '0';
         $user->save();
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just delete '. $user->_full_name);
     }
 
     public function loadData(Request $request)

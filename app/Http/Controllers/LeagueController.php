@@ -49,8 +49,9 @@ class LeagueController extends Controller
     {
     	$this->validate($request, $this->rules);
         $request->request->add(['updated_by' => Auth::user()->id]);
-        $leagues = League::create($request->all() + ['created_by' =>  Auth::user()->id, '_active' =>  '1']);
-        return back()->with('success', 'You have just created new League');
+        $leagues = League::create($request->all() + ['created_by' =>  Auth::user()->id]);
+        \Session::flash('flash_message','You have just created new League');
+        return redirect()->route("leagues.index");    
     }
 
     /**
@@ -91,8 +92,11 @@ class LeagueController extends Controller
             $league->_name = $request->_name;
             $league->_desc = $request->_desc;
             $league->updated_by =  Auth::user()->id;
+            $league->_active = $request->_active;
         $league->save();
-        return back()->with('success', 'You have just update '. $league->_name);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just update '. $league->_name);
+        return redirect()->route("leagues.index");        
     }
 
     /**
@@ -106,6 +110,7 @@ class LeagueController extends Controller
         $league = League::find($id);
         $league->_active = '0';
         $league->save();
+        \Session::flash('flash_message','You have just delete '. $league->_name);
     }
 
     public function loadData(Request $request)
@@ -116,7 +121,9 @@ class LeagueController extends Controller
             $status = $request->status;
         }
                 
-        return Datatables::of(League::query()->where('_active', '=' , $status))->addIndexColumn()->make(true);
+        return Datatables::of(League::query()
+            //->where('_active', '=' , $status)
+            )->addIndexColumn()->make(true);
     }
 
     public function getClubs($id) {
