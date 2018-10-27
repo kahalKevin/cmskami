@@ -44,6 +44,22 @@ Route::get('category-product/category/get-category-child/{id}', 'CategoryControl
 	Route::resource('/category', 'CategoryController');
 });
 
+Route::get('web-management/home/load-data', 'HomeBannerController@loadData');
+Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@loadData');
+// Route::get('web-management/privacyPolicy/load-data', 'PrivacyPolicyController@loadData');
+// Route::get('web-management/termUser/load-data', 'TermUserController@loadData');
+// Route::get('web-management/aboutUs/load-data', 'AboutUsController@loadData');
+// Route::get('web-management/contactUs/load-data', 'ContactUsController@loadData');
+
+\Route::group(['prefix' => 'web-management', 'middleware' => 'auth'], function () {
+	Route::resource('/home', 'HomeBannerController');
+	Route::resource('/adsInventory', 'AdsInventoryController');
+	Route::resource('/privacyPolicy', 'PrivacyPolicyController');
+	Route::resource('/termUser', 'TermUserController');
+	Route::resource('/aboutUs', 'AboutUsController');
+	Route::resource('/contactUs', 'ContactUsController');
+});
+
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
