@@ -55,12 +55,19 @@ return [
             'visibility' => 'public',
         ],
 
+        'adsbanner' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/adsbanner'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
         'homebanner' => [
             'driver' => 'local',
             'root' => storage_path('app/public/images/homebanner'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-        ],
+        ],        
 
         's3' => [
             'driver' => 's3',
