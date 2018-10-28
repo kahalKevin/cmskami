@@ -120,7 +120,7 @@ class PlayerController extends Controller
         $player = Player::find($id);
         $player->_active = '0';
         $player->save();
-        \Session::flash('flash_message','You have just update '. $player->_name);
+        \Session::flash('flash_message','You have just deleted '. $player->_name);
     }
 
     public function loadData(Request $request)

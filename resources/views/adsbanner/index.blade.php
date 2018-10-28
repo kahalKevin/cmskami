@@ -1,9 +1,12 @@
 @extends('layouts.admin_template')
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset("/css/bootstrap-datetimepicker.min.css")}}">        
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>    
-
+        <script type="text/javascript" src="{{ asset("/assets/admin/assets/js/lib/moment/moment.js")}}"></script>
+        <script type="text/javascript" src="{{ asset("/js/bootstrap.min.js")}}"></script>
+        <script type="text/javascript" src="{{ asset("/js/bootstrap-datetimepicker.min.js")}}"></script>
 @section('content')
 <meta name="_token" content="{{ csrf_token() }}"/>
 <div class="row">
@@ -16,7 +19,88 @@
     <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>
 @endif
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-7">
+
+
+
+        <div class="card">
+            <div class="card-header">
+                <strong>Filter</strong> Ads/Inventory Banner
+            </div>
+            <div class="card-body card-block">
+                {{ Form::open(array('url'=>'web-management/adsInventory' , 'method'=>'GET' )) }}
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="banner_type_id" class=" form-control-label">Banner Type</label></div>
+                        <div class="col-12 col-md-9">
+                          <select class="form-control" name="banner_type_id">
+                                <option value="">--- Banner Type ---</option>
+                            @foreach($banner_types as $type)
+                                <option value="{{ $type->id }}" {{ $request->banner_type_id == $type->id? 'selected' : '' }}>{{ $type->_name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="_title" class=" form-control-label">Title</label></div>
+                        <div class="col-12 col-md-9"><input id="" name="_title" class="form-control" value="{{ $request->_title ? $request->_title : '' }}"></div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="_href_url" class=" form-control-label">Href URL</label></div>
+                        <div class="col-12 col-md-9"><input id="" name="_href_url" class="form-control" value="{{ $request->_href_url ? $request->_href_url : '' }}"></div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="period" class=" form-control-label">Period</label></div>
+                        <div class="col-12 col-md-9">
+                          
+                            <div class='col-12 input-group date'>
+                                <input type='text' id='datetimepicker1' name="_start_date" value="{{ isset($adsbanners) ? $adsbanners->_start_date : '' }}"/>
+                                <!-- <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span> -->
+
+                                <label for="_desc" class="mb-1"> &nbsp;&nbsp;To&nbsp;&nbsp; </label>
+
+                                <input type='text' id='datetimepicker2' name="_end_date" value="{{ isset($adsbanners) ? $adsbanners->_end_date : '' }}"/>
+                                <!-- <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span> -->
+                            </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker1').datetimepicker({
+                                    format: 'YYYY-MM-DD hh:mm:ss'
+                                });
+                                $('#datetimepicker2').datetimepicker({
+                                    format: 'YYYY-MM-DD hh:mm:ss'
+                                });
+                            });
+                        </script>
+
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="status" class=" form-control-label">Active</label></div>
+                        <div class="col-12 col-md-9">
+                          <select class="form-control" name="status">
+                            <option value="" {{ !isset($request->status) ? 'selected' : '' }}>Please Select</option>
+                            <option value="true" {{ $request->status == 'true' ? 'selected' : '' }}>Yes</option>
+                            <option value="false" {{ $request->status == 'false' ? 'selected' : '' }}>No</option>
+                          </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary"><strong>Submit</strong></button>
+                    </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+
+
         
     </div>
     <div align="right" class="col-sm-12">
@@ -42,7 +126,7 @@
               </table>
           <script>
            $(function() {
-                var url_clean = "{{ url('web-management/adsInventory/load-data') }}"
+                var url_clean = "{{ url('web-management/adsInventory/load-data?banner_type_id='. $request->banner_type_id . '&_title='. $request->_title. '&_href_url='. $request->_href_url . '&status='. $request->status . '&_start_date='. $request->_start_date . '&_end_date='. $request->_end_date) }}"
                 var fix_url = url_clean.replace(/&amp;/g, '&');
                  $('#table').DataTable({
                  processing: true,
