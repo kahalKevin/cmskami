@@ -18,8 +18,8 @@ class AdsInventoryController extends Controller
     protected $rules = array(
             'banner_type_id' => 'required',
             '_image_alt' => 'required',
-            '_start_date' => 'required',
-            '_end_date' => 'required',
+            '_start_date' => 'required|date',
+            '_end_date' => 'required|date|after_or_equal:_start_date',
             '_title'         => 'required',
             '_href_url' => 'required|url',
             '_href_open_type' => 'required',
@@ -36,6 +36,21 @@ class AdsInventoryController extends Controller
         $this->middleware('auth');
     }
 
+    public function formatTimeDate($inputDate){
+        // "10/28/2018 6:12 PM"
+        $bySpace = explode(" ", $inputDate);
+        $datePieces = explode("/", $bySpace[0]);
+        $datePart = $datePieces[2]."-".$datePieces[0]."-".$datePieces[1];
+
+        $timePieces = explode(":", $bySpace[1]);
+        if($bySpace[2] == "PM"){
+            $timePieces[0] += 12; 
+        }
+        $timePart = $timePieces[0].":".$timePieces[1].":00";
+        $outputDate = $datePart." ".$timePart;
+        return $outputDate;
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -43,7 +58,8 @@ class AdsInventoryController extends Controller
      */
     public function index(Request $request)
     {
-        return view('adsbanner.index')->with('request', $request);
+        $banner_types = Type::query()->where('category_id', 34)->get();
+        return view('adsbanner.index')->with(compact('banner_types', 'request'));
     }
 
     /**
@@ -53,8 +69,8 @@ class AdsInventoryController extends Controller
      */
     public function create()
     {
-        $banner_type = Type::query()->where('category_id', 34)->get();
-        return view('adsbanner.create')->with(compact('banner_type'));
+        $banner_types = Type::query()->where('category_id', 34)->get();
+        return view('adsbanner.create')->with(compact('banner_types'));
     }
 
     /**
@@ -91,7 +107,35 @@ class AdsInventoryController extends Controller
 
     public function loadData(Request $request)
     {
-        return Datatables::of(AdsBanner::query()->where('_active', '=' , '1'))->addIndexColumn()->make(true);
+        $status = '1';
+
+        $query = AdsBanner::query()
+        ->where(function($q) use ($request) {
+          $q->where('_title','LIKE', '%'.$request->_title.'%')
+            ->where('_href_url','LIKE', '%'.$request->_href_url.'%')
+            ->where('banner_type_id', 'LIKE', '%'.$request->banner_type_id.'%');
+          });
+
+        if(isset($request->status)) {
+            $status = '1';
+            if($request->status == 'false'){
+                $status = '0';
+            }
+            $query = $query->where('_active', '=' , $status);
+        } else {
+            $query = $query->where('_active', '=' , $status);
+        }
+
+        if(isset($request->_start_date)) {
+            $query = $query->where('_start_date', '>=' , $request->_start_date);
+        }
+
+        if(isset($request->_end_date)) {
+            $query = $query->where('_end_date', '<+' , $request->_end_date);
+        }
+
+        return Datatables::of($query
+        )->addIndexColumn()->make(true);
     }
 
     /**
@@ -102,11 +146,9 @@ class AdsInventoryController extends Controller
      */
     public function edit($id)
     {
-         // get the nerd
-        $adsbanner = AdsBanner::find($id);
-
-        // show the edit form and pass the nerd
-        return view('adsInventory.edit')->with('adsbanner', $adsbanner);
+        $adsbanners = AdsBanner::find($id);
+        $banner_types = Type::query()->where('category_id', 34)->get();
+        return view('adsbanner.edit')->with(compact('banner_types', 'adsbanners'));
     }
 
     /**
@@ -148,5 +190,18 @@ class AdsInventoryController extends Controller
         return redirect()->route("adsInventory.index");
     }
 
-            
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $adsbanner = AdsBanner::find($id);
+        $adsbanner->_active = '0';
+        $adsbanner->save();
+        unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));    
+        \Session::flash('flash_message','You have just deleted '. $adsbanner->_image_real_name);
+    }    
 }

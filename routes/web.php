@@ -53,10 +53,6 @@ Route::get('category-product/product-gallery/load-data', 'ProductGalleryControll
 
 Route::get('web-management/home/load-data', 'HomeBannerController@loadData');
 Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@loadData');
-// Route::get('web-management/privacyPolicy/load-data', 'PrivacyPolicyController@loadData');
-// Route::get('web-management/termUser/load-data', 'TermUserController@loadData');
-// Route::get('web-management/aboutUs/load-data', 'AboutUsController@loadData');
-// Route::get('web-management/contactUs/load-data', 'ContactUsController@loadData');
 
 \Route::group(['prefix' => 'web-management', 'middleware' => 'auth'], function () {
 	Route::resource('/home', 'HomeBannerController');
