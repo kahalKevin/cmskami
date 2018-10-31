@@ -63,7 +63,7 @@
                         </div>                                                                    
                       </div>
                       <div class="col-lg-6">
-                                                <div class="row form-group">
+                        <div class="row form-group">
                             <div class="col col-md-3"><label for="_period" class=" form-control-label">Period</label></div>
                             <div class="col-11 col-md-8"><input id="" name="_period" class="form-control dateRangePicker" value="{{ $request->_period ? $request->_period : '' }}"></div>
                         </div>
