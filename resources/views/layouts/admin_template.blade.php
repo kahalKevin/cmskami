@@ -19,8 +19,6 @@
     <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/themify-icons.css")}}">
     <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/pe-icon-7-filled.css")}}">
 
-    <link href="{{ asset("/assets/admin/assets/calendar/fullcalendar.css")}}" rel="stylesheet" />
-
     <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/style.css")}}">
 </head>
 <body>
@@ -47,14 +45,11 @@
     </div><!-- /#right-panel -->
 
 
-    <script src="{{ asset("/assets/admin/assets/js/vendor/jquery-2.1.4.min.js")}}"></script>
-    <script src="{{ asset("/assets/admin/assets/js/popper.min.js")}}"></script>
-    <script src="{{ asset("/assets/admin/assets/js/plugins.js")}}"></script>
-    <script src="{{ asset("/assets/admin/assets/js/main.js")}}"></script>
+    <script src={{ asset("/assets/admin/assets/js/vendor/jquery-2.1.4.min.js")}}></script>
+    <script src={{ asset("/assets/admin/assets/js/popper.min.js")}}></script>
+    <script src={{ asset("/assets/admin/assets/js/plugins.js")}}></script>
+    <script src={{ asset("/assets/admin/assets/js/main.js")}}></script>
 
-    <script src="{{ asset("/assets/admin/assets/js/lib/moment/moment.js")}}"></script>
-    <script src="{{ asset("/assets/admin/assets/calendar/fullcalendar.min.js")}}"></script>
-    <script src="{{ asset("/assets/admin/assets/calendar/fullcalendar-init.js")}}"></script>
 <div id="container">
 </div>
 </body>

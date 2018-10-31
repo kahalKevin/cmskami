@@ -74,8 +74,10 @@ class CategoryController extends Controller
             '_image_real_name' => $imageName, 
             '_image_enc_name' => $image->hashName(), 
             '_image_url' => $publicPath
-        ]);        
-        return back()->with('success', 'You have just created new Category');        
+        ]);
+        //PUT HERE AFTER YOU SAVE
+        \Session::flash('flash_message','You have just created new Category');
+        return redirect()->route("category.index"); 
     }
 
     /**

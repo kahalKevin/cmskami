@@ -27,7 +27,11 @@ Route::get('master-data/leagues/get-clubs/{id}', 'LeagueController@getClubs');
 
 Route::get('category-product/category/load-data', 'CategoryController@loadData');
 Route::get('category-product/category/get-category-child/{id}', 'CategoryController@getCategoryChild');
-
+Route::get('category-product/product/load-data', 'ProductController@loadData');
+Route::get('category-product/product-stock/load-data', 'ProductStockController@loadData');
+Route::get('category-product/product-gallery/load-data', 'ProductGalleryController@loadData');
+//Route::get('category-product/product/manage-stock', 'ProductController@indexStock');
+//Route::get('category-product/product/manage-gallery', 'ProductController@indexGallery');
 
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
@@ -42,6 +46,9 @@ Route::get('category-product/category/get-category-child/{id}', 'CategoryControl
 
 \Route::group(['prefix' => 'category-product', 'middleware' => 'auth'], function () {
 	Route::resource('/category', 'CategoryController');
+	Route::resource('/product', 'ProductController');
+	Route::resource('/product-stock', 'ProductStockController');
+	Route::resource('/product-gallery', 'ProductGalleryController');
 });
 
 Route::get('web-management/home/load-data', 'HomeBannerController@loadData');
