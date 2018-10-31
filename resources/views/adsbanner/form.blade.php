@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/daterangepicker.css")}}">
 <div class="card">
     <div class="card-header">
         <strong class="card-title"><h3 class="text-center"></h3></strong>
@@ -105,23 +106,13 @@
                     </div>
 
                     <div class="row">
-                        <div class='col-12'>
+                        <div class='col-6'>
                             <div class="form-group">
                                 <label for="_desc" class="control-label mb-1">Period</label>
-                                    <div class='col-6 input-group date'>
-                                        <input type='text' id='datetimepicker1' name="_start_date" value="{{ isset($adsbanners) ? $adsbanners->_start_date : '' }}"/>
-                                        <!-- <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span> -->
-
-                                        <label for="_desc" class="mb-1"> &nbsp;&nbsp;To&nbsp;&nbsp; </label>
-
-                                        <input type='text' id='datetimepicker2' name="_end_date" value="{{ isset($adsbanners) ? $adsbanners->_end_date : '' }}"/>
-                                        <!-- <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span> -->
+                                    <div>
+                                        <input type='text' id='_period' name="_period" value="" class="form-control dateRangePickerAds" />
                                     </div>
-                                <script type="text/javascript">
+<!--                                 <script type="text/javascript">
                                     $(function () {
                                         $('#datetimepicker1').datetimepicker({
                                             format: 'YYYY-MM-DD hh:mm:ss'
@@ -130,7 +121,7 @@
                                             format: 'YYYY-MM-DD hh:mm:ss'
                                         });
                                     });
-                                </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>
@@ -140,6 +131,31 @@
                 {!! Form::close() !!}
             </div>
         </div>
-
     </div>
 </div>
+
+<script src={{ asset("/assets/admin/assets/js/vendor/jquery-2.1.4.min.js")}}></script>
+<script src={{ asset("/assets/admin/assets/js/moment.min.js")}}></script>        
+<script src={{ asset("/assets/admin/assets/js/daterangepicker.min.js")}}></script>    
+<script type="text/javascript">
+    var $ = jQuery;
+    $(document).ready(function() {
+        $('.dateRangePickerAds').daterangepicker({
+        autoUpdateInput: false,
+        timePicker: true,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+              format: 'YYYY-MM-DD HH:mm:ss',
+              cancelLabel: 'Clear'
+            }
+        });
+    });
+    $('.dateRangePickerAds').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+    $('.dateRangePickerAds').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+</script>
