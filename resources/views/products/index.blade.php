@@ -171,13 +171,22 @@
     var $ = jQuery;
     $(document).ready(function() {
         $('.dateRangePicker').daterangepicker({
+        autoUpdateInput: false,
         timePicker: true,
             startDate: moment().startOf('hour'),
             endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
-              format: 'YYYY-MM-DD HH:mm:ss'
+              format: 'YYYY-MM-DD HH:mm:ss',
+              cancelLabel: 'Clear'
             }
         });
+    });
+    $('.dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+    $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
     });
 </script>
 @endsection
