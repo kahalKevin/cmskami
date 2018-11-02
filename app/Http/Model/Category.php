@@ -4,10 +4,13 @@ namespace App\Http\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model {
-	
+    use SoftDeletes;
+
     protected $table = 'cms_tm_category';
+    protected $dates = ['delete_at'];
 
     protected $fillable = [
         'parent_category_id',

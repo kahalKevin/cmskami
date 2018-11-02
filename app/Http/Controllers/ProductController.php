@@ -12,6 +12,8 @@ use App\Http\Model\League as League;
 use App\Http\Model\Club as Club;
 use App\Http\Model\Player as Player;
 use App\Http\Model\ProductTag as ProductTag;
+use App\Http\Model\ProductStock as ProductStock;
+use App\Http\Model\ProductGallery as ProductGallery;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
@@ -146,7 +148,7 @@ class ProductController extends Controller
 
         $this->validate($request, $this->rules_update);
         $product = Product::find($id);
-            $product->category_id = $request->parent_category_id;        
+            $product->category_id = $request->category_id;        
             $product->gender_allocation_id = $request->gender_allocation_id;
             $product->_name = $request->_name;        
             $product->_slug = $request->_slug;
@@ -193,7 +195,12 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-
+        $product = Product::find($id);
+        $tags_deleted = ProductTag::where('product_id',$product->id)->delete();
+        $product_stock_deleted = ProductStock::where('product_id',$product->id)->delete();
+        $product_gallery_deleted = ProductGallery::where('product_id',$product->id)->delete();
+        $product->delete();
+        \Session::flash('flash_message','You have just delete '. $product->_name);
     }
 
     public function loadData(Request $request)
@@ -206,7 +213,7 @@ class ProductController extends Controller
 
         $query = \DB::table('cms_tm_product AS product')
                     ->leftjoin('cms_tm_category AS cat1', 'product.category_id', '=', 'cat1.id')        
-                    ->leftjoin('sys_type AS type', 'cat1.gender_allocation_id', '=', 'type.id')
+                    ->leftjoin('sys_type AS type', 'product.gender_allocation_id', '=', 'type.id')
                     ->select(
                         'product.id',
                         'product._image_url',
@@ -222,16 +229,23 @@ class ProductController extends Controller
                         )
                     ->where('product._name','LIKE', '%'.$request->name.'%');
             
-            if(isset($request->status)) {
-                $status = '1';
-                if($request->status == 'false'){
-                    $status = '0';
-                }
-                $query = $query->where('product._active', '=' , $status);
+        if(isset($request->status)) {
+            $status = '1';
+            if($request->status == 'false'){
+                $status = '0';
             }
-            if(isset($request->genAlloc)) {
-                $query = $query->where('product.gender_allocation_id', '=' , $request->genAlloc);
-            }                   
+            $query = $query->where('product._active', '=' , $status);
+        }
+
+        if(isset($request->genAlloc)) {
+            $query = $query->where('product.gender_allocation_id', '=' , $request->genAlloc);
+        }
+        if(isset($request->categoryParent)) {
+            $query = $query->where('product.category_id', '=' , $request->categoryParent);
+        }   
+        if(isset($request->categoryChild)) {
+            $query = $query->where('product.category_id', '=' , $request->categoryChild);
+        }                                       
             
         return Datatables::of($query->get())->addIndexColumn()->make(true);
     }

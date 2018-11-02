@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Model\Size as Size;
+use App\Http\Model\ProductStock as ProductStock;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Redirect;
@@ -104,9 +105,9 @@ class SizeController extends Controller
      */
     public function destroy($id)
     {
+        $product_stock_delete = ProductStock::where('size_id', $id)->delete();
         $size = Size::find($id);
-        $size->_active = '0';
-        $size->save();
+        $size->delete();
         \Session::flash('flash_message', 'You have just delete '. $size->_name);
         return redirect()->route("sizes.index");          
     }

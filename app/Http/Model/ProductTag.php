@@ -4,11 +4,13 @@ namespace App\Http\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductTag extends Model {
+    use SoftDeletes;    
 	
     protected $table = 'cms_tm_product_tag';
-    
+    protected $dates = ['delete_at'];    
     public $timestamps = false;
     
     protected $fillable = [

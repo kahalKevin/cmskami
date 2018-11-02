@@ -4,11 +4,14 @@ namespace App\Http\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model {
-	
-    protected $table = 'cms_tm_product';
+	use SoftDeletes;
 
+    protected $table = 'cms_tm_product';
+    protected $dates = ['delete_at'];
+    
     protected $fillable = [
         'category_id',
         'gender_allocation_id',
