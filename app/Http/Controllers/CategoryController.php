@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Model\Category as Category;
+use App\Http\Model\Product as Product;
+use App\Http\Model\ProductStock as ProductStock;
+use App\Http\Model\ProductGallery as ProductGallery;
+use App\Http\Model\ProductTag as ProductTag;
 use App\Http\Model\Type as Type;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -158,16 +162,30 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categories = Category::where('parent_category_id','=', $id)->get();
-        foreach ($categories as $cat) {
-            $cat->_active = '0';
-            $cat->save();
+        $category_childs = Category::where('parent_category_id','=', $id)->get();
+        foreach ($category_childs as $category_child) {
+          $products = Product::where('category_id', $category_child->id)->get();
+          foreach ($products as $product) {
+            $products_delete = $this->destroyProduct($product->id);
+          }
+          $category_child_delete = $category_child->delete();
         }
-        
-        $category = Category::find($id);
-        $category->_active = '0';
-        $category->save();
-        \Session::flash('flash_message','You have just delete '. $category->_name);
+        $products_categories = Product::where('category_id', $id)->get();
+        foreach ($products_categories as $procat) {
+          $procat_delete = $this->destroyProduct($procat->id);
+        }
+        $category_deleted = Category::find($id);
+        $category_deleted->delete();
+        \Session::flash('flash_message','You have just delete '. $category_deleted->_name);
+    }
+
+    public function destroyProduct($id)
+    {
+        $product = Product::find($id);
+        $tags_deleted = ProductTag::where('product_id',$product->id)->delete();
+        $product_stock_deleted = ProductStock::where('product_id',$product->id)->delete();
+        $product_gallery_deleted = ProductGallery::where('product_id',$product->id)->delete();
+        $product->delete();
     }
 
     public function loadData(Request $request)
@@ -213,7 +231,8 @@ class CategoryController extends Controller
                                 ->orWhere('cat1.parent_category_id','=', $request->categoryChild);
                               });
             }                        
-            
+            $query = $query->where('cat2.deleted_at', '=' , null);
+            $query = $query->where('cat1.deleted_at', '=' , null);
         return Datatables::of($query->get())->addIndexColumn()->make(true);
     }
 

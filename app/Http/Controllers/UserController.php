@@ -122,8 +122,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        $user->_active = '0';
-        $user->save();
+        $user->delete();
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just delete '. $user->_full_name);
     }

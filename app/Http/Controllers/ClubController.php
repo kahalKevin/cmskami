@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Model\Club as Club;
 use App\Http\Model\League as League;
+use App\Http\Model\Player as Player;
+use App\Http\Model\ProductTag as ProductTag;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Redirect;
@@ -19,7 +21,7 @@ class ClubController extends Controller
             '_name'       => 'required',
             '_desc'      => 'required'
     );
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -111,11 +113,23 @@ class ClubController extends Controller
      */
     public function destroy($id)
     {
+        $players = Player::where('club_id', $id)->get();
+        foreach ($players as $player) {
+            $player_delete = $this->destroyPlayer($player->id);
+        }
+
+        $tags_deleted = ProductTag::where('club_id',$id)->delete();
         $club = Club::find($id);
-        $club->_active = '0';
-        $club->save();
+        $club->delete();
         \Session::flash('flash_message','You have just delete '. $club->_name);        
     }
+
+    public function destroyPlayer($id)
+    {
+        $tags_deleted = ProductTag::where('player_id',$id)->delete();
+        $player = Player::find($id);
+        $player->delete();
+    }    
 
     public function loadData(Request $request)
     {   

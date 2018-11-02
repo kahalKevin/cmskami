@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Model\League as League;
 use App\Http\Model\Club as Club;
 use App\Http\Model\Player as Player;
+use App\Http\Model\ProductTag as ProductTag;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Redirect;
@@ -117,9 +118,9 @@ class PlayerController extends Controller
      */
     public function destroy($id)
     {
+        $tags_deleted = ProductTag::where('player_id',$id)->delete();
         $player = Player::find($id);
-        $player->_active = '0';
-        $player->save();
+        $player->delete();
         \Session::flash('flash_message','You have just deleted '. $player->_name);
     }
 

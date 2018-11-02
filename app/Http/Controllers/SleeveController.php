@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Model\Sleeve as Sleeve;
+use App\Http\Model\ProductTag as ProductTag;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Redirect;
@@ -105,9 +106,9 @@ class SleeveController extends Controller
      */
     public function destroy($id)
     {
+        $tags_deleted = ProductTag::where('sleeve_id',$id)->delete();
         $sleeve = Sleeve::find($id);
-        $sleeve->_active = '0';
-        $sleeve->save();
+        $sleeve->delete();
         \Session::flash('flash_message','You have just delete '. $sleeve->_name);
     }
 

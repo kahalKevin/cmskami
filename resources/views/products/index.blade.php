@@ -27,7 +27,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="row form-group">
-                            <div class="col col-md-2"><label for="category_parent" class=" form-control-label">Product</label></div>
+                            <div class="col col-md-2"><label for="category_parent" class=" form-control-label">Category</label></div>
                             <div class="col-12 col-md-9">
                               <select class="form-control" name="category_parent">
                               <option value="">--- NONE ---</option>
@@ -49,7 +49,7 @@
                                 @endif
                               </select>
                             </div>
-                        </div>
+                        </div> 
                         <div class="row form-group">
                             <div class="col col-md-2"><label for="gender_allocation" class=" form-control-label">Gender Allocation</label></div>
                             <div class="col-12 col-md-9">
@@ -109,8 +109,8 @@
                       <th>Category</th>
                       <th>Gender Allocation</th>
                       <th>Price</th>
-                      <th>View & Buy</th>
-                      <th width="10%">Status</th>
+                      <th width="10%">View & Buy</th>
+                      <th width="5%">Status</th>
                       <th width="15%"><center>Action</center></th>
                     </tr>
                  </thead>
@@ -140,7 +140,11 @@
                           { data: 'category_name', name: 'category_name' },
                           { data: 'gender_name', name: 'gender_name' },
                           { data: '_price', name: '_price' },
-                          { data: 'id', defaultContent: '' },
+                          {
+                              mRender: function (data, type, row) {
+                                return '<center>View : '+ row._count_view +' <br> Buy : '+ row._count_buy +'</center>'
+                              }                            
+                          },
                           {
                               mRender: function (data, type, row) {
                               if (row._active == '1') {
@@ -166,7 +170,40 @@
         </div>
     </div>    
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select[name="category_parent"]').on('change', function(){
+            var category_parent = $(this).val();
+            if(category_parent) {
+                $.ajax({
+                    url: '/category-product/category/get-category-child/'+category_parent,
+                    type:"GET",
+                    dataType:"json",
+                    beforeSend: function(){
+                        $('#loader').css("visibility", "visible");
+                    },
 
+                    success:function(data) {
+
+                        $('select[name="category_child"]').empty();
+                        $('select[name="category_child"]').append('<option value="">--- Select ---</option>');
+                        $.each(data, function(key, value){
+
+                            $('select[name="category_child"]').append('<option value="'+ key +'">' + value + '</option>');
+
+                        });
+                    },
+                    complete: function(){
+                        $('#loader').css("visibility", "hidden");
+                    }
+                });
+            } else {
+                $('select[name="category_child"]').empty();
+            }
+
+        });
+    });
+</script>
 <script type="text/javascript">
     var $ = jQuery;
     $(document).ready(function() {
@@ -188,5 +225,23 @@
     $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
     });
+</script>
+<script type="text/javascript">
+  function checkDelete(id) {
+    if (confirm('Really Delete?')) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        $.ajax({
+          type: "DELETE",
+          url: 'product/' + id,
+          success: function(result) {
+             location.reload();
+          }
+        });
+      }
+  }
 </script>
 @endsection
