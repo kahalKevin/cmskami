@@ -82,6 +82,12 @@ class AdsInventoryController extends Controller
     public function store(Request $request)
     {
         request()->validate([
+                '_period' => 'required|between:41,41',
+        ]);
+        $dateSeparated = explode(" - ", $request->_period);
+        $request->merge(['_start_date' => $dateSeparated[0]]);
+        $request->merge(['_end_date' => $dateSeparated[1]]);
+        request()->validate([
                 '_upload_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
         $this->validate($request, $this->rules);
@@ -107,8 +113,16 @@ class AdsInventoryController extends Controller
 
     public function loadData(Request $request)
     {
-        $status = '1';
+         if(isset($request->_period)){
+          request()->validate([
+                  '_period' => 'required|between:41,41',
+          ]);
+          $dateSeparated = explode(" - ", $request->_period);
+          $request->merge(['_start_date' => $dateSeparated[0]]);
+          $request->merge(['_end_date' => $dateSeparated[1]]);
+         }
 
+        $status = '1';
         $query = AdsBanner::query()
         ->where(function($q) use ($request) {
           $q->where('_title','LIKE', '%'.$request->_title.'%')
@@ -131,9 +145,8 @@ class AdsInventoryController extends Controller
         }
 
         if(isset($request->_end_date)) {
-            $query = $query->where('_end_date', '<+' , $request->_end_date);
+            $query = $query->where('_end_date', '<=' , $request->_end_date);
         }
-
         return Datatables::of($query
         )->addIndexColumn()->make(true);
     }
@@ -148,7 +161,8 @@ class AdsInventoryController extends Controller
     {
         $adsbanners = AdsBanner::find($id);
         $banner_types = Type::query()->where('category_id', 34)->get();
-        return view('adsbanner.edit')->with(compact('banner_types', 'adsbanners'));
+        $period = $adsbanners->_start_date . ' - ' . $adsbanners->_end_date;
+        return view('adsbanner.edit')->with(compact('banner_types', 'adsbanners', 'period'));
     }
 
     /**
@@ -161,15 +175,25 @@ class AdsInventoryController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
+                '_period' => 'required|between:41,41',
+        ]);
+        $dateSeparated = explode(" - ", $request->_period);
+        $request->merge(['_start_date' => $dateSeparated[0]]);
+        $request->merge(['_end_date' => $dateSeparated[1]]);      
+        request()->validate([
                 '_upload_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);        
+        ]);
         $this->validate($request, $this->rules);
         $adsbanner = AdsBanner::find($id);
+        $adsbanner->_image_alt = $request->_image_alt;        
+        $adsbanner->banner_type_id = $request->banner_type_id;
         $adsbanner->_title = $request->_title;        
         $adsbanner->_href_url = $request->_href_url;
         $adsbanner->_href_open_type = $request->_href_open_type;
         $adsbanner->_desc = $request->_desc;
         $adsbanner->updated_by =  Auth::user()->id;
+        $adsbanner->_start_date = $request->_start_date;
+        $adsbanner->_end_date = $request->_end_date;
 
         if($request->hasFile('_upload_image')){
             $banner = $request->file('_upload_image');
@@ -199,9 +223,8 @@ class AdsInventoryController extends Controller
     public function destroy($id)
     {
         $adsbanner = AdsBanner::find($id);
-        $adsbanner->_active = '0';
-        $adsbanner->save();
+        $adsbanner->delete();
         unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));    
         \Session::flash('flash_message','You have just deleted '. $adsbanner->_image_real_name);
-    }    
+    }
 }

@@ -26,10 +26,13 @@
                         </div>
                     @endif
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="_content" class="control-label mb-1">Content</label>
-                                <textarea name="_content" id="_content" rows="9" placeholder="" class="form-control">{{ isset($policy) ? $policy->_content : '' }}</textarea>
+                                <textarea name="_content" id="editor1" rows="10" cols="80">{{ isset($policy) ? $policy->_content : '' }}</textarea>
+                                <script>
+                                    CKEDITOR.replace( 'editor1' );
+                                </script>                                
                             </div>
                         </div>
                     </div>

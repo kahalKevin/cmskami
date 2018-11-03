@@ -1,12 +1,11 @@
 @extends('layouts.admin_template')
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset("/css/bootstrap-datetimepicker.min.css")}}">        
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>    
         <script type="text/javascript" src="{{ asset("/assets/admin/assets/js/lib/moment/moment.js")}}"></script>
-        <script type="text/javascript" src="{{ asset("/js/bootstrap.min.js")}}"></script>
-        <script type="text/javascript" src="{{ asset("/js/bootstrap-datetimepicker.min.js")}}"></script>
+        <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/daterangepicker.css")}}">
+        <script src={{ asset("/assets/admin/assets/js/daterangepicker.min.js")}}></script>
 @section('content')
 <meta name="_token" content="{{ csrf_token() }}"/>
 <div class="row">
@@ -52,34 +51,8 @@
                     </div>
 
                     <div class="row form-group">
-                        <div class="col col-md-3"><label for="period" class=" form-control-label">Period</label></div>
-                        <div class="col-12 col-md-9">
-                          
-                            <div class='col-12 input-group date'>
-                                <input type='text' id='datetimepicker1' name="_start_date" value="{{ isset($adsbanners) ? $adsbanners->_start_date : '' }}"/>
-                                <!-- <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span> -->
-
-                                <label for="_desc" class="mb-1"> &nbsp;&nbsp;To&nbsp;&nbsp; </label>
-
-                                <input type='text' id='datetimepicker2' name="_end_date" value="{{ isset($adsbanners) ? $adsbanners->_end_date : '' }}"/>
-                                <!-- <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span> -->
-                            </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker1').datetimepicker({
-                                    format: 'YYYY-MM-DD hh:mm:ss'
-                                });
-                                $('#datetimepicker2').datetimepicker({
-                                    format: 'YYYY-MM-DD hh:mm:ss'
-                                });
-                            });
-                        </script>
-
-                        </div>
+                        <div class="col col-md-3"><label for="_period" class=" form-control-label">Period</label></div>
+                        <div class="col-11 col-md-8"><input id="" name="_period" class="form-control dateRangePicker" value="{{ $request->_period ? $request->_period : '' }}"></div>   
                     </div>
 
                     <div class="row form-group">
@@ -126,7 +99,7 @@
               </table>
           <script>
            $(function() {
-                var url_clean = "{{ url('web-management/adsInventory/load-data?banner_type_id='. $request->banner_type_id . '&_title='. $request->_title. '&_href_url='. $request->_href_url . '&status='. $request->status . '&_start_date='. $request->_start_date . '&_end_date='. $request->_end_date) }}"
+                var url_clean = "{{ url('web-management/adsInventory/load-data?banner_type_id='. $request->banner_type_id . '&_title='. $request->_title. '&_href_url='. $request->_href_url . '&status='. $request->status . '&_period='. $request->_period) }}"
                 var fix_url = url_clean.replace(/&amp;/g, '&');
                  $('#table').DataTable({
                  processing: true,
@@ -159,6 +132,28 @@
         </div>
     </div>    
 </div>
+<script type="text/javascript">
+    var $ = jQuery;
+    $(document).ready(function() {
+        $('.dateRangePicker').daterangepicker({
+        autoUpdateInput: false,
+        timePicker: true,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+              format: 'YYYY-MM-DD HH:mm:ss',
+              cancelLabel: 'Clear'
+            }
+        });
+    });
+    $('.dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+    $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+</script>
 <script type="text/javascript">
   function checkDelete(id) {
     if (confirm('Really Delete?')) {
