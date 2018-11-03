@@ -101,7 +101,6 @@ class AdsInventoryController extends Controller
 
         $adsbanners = AdsBanner::create($request->all() + [
             'created_by' =>  Auth::user()->id, 
-            '_active' =>  '1', 
             '_image_real_name' => $imageName, 
             '_image_enc_name' => $imageId.'.'.$extension, 
             '_image_url' => '/storage/images/adsbanner/'.$imageId.'.'.$extension, 
@@ -135,8 +134,6 @@ class AdsInventoryController extends Controller
             if($request->status == 'false'){
                 $status = '0';
             }
-            $query = $query->where('_active', '=' , $status);
-        } else {
             $query = $query->where('_active', '=' , $status);
         }
 
@@ -191,6 +188,7 @@ class AdsInventoryController extends Controller
         $adsbanner->_href_url = $request->_href_url;
         $adsbanner->_href_open_type = $request->_href_open_type;
         $adsbanner->_desc = $request->_desc;
+        $adsbanner->_active = $request->_active;        
         $adsbanner->updated_by =  Auth::user()->id;
         $adsbanner->_start_date = $request->_start_date;
         $adsbanner->_end_date = $request->_end_date;

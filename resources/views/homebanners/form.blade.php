@@ -78,6 +78,24 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="_active" class="control-label mb-1">Active?</label>
+                                <select class="form-control" name="_active">
+                                @if(isset($homebanners))
+                                    <option value="1" {{ $homebanners->_active == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ $homebanners->_active == '0' ? 'selected' : '' }}>No</option>
+                                @else
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>                           
+                                        
                     <div>
                         <button type="submit" class="btn btn-success"><strong>{{ isset($homebanners) ? 'Update' : 'Create' }}</strong></button>
                     </div>                
