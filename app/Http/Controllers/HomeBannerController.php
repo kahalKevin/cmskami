@@ -153,9 +153,8 @@ class HomebannerController extends Controller
     public function destroy($id)
     {
         $homebanner = HomeBanner::find($id);
-        $homebanner->_active = '0';
-        $homebanner->save();
+        $homebanner->delete();
         unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));    
-        \Session::flash('flash_message','You have just update '. $homebanner->_image_real_name);
+        \Session::flash('flash_message','You have just delete '. $homebanner->_image_real_name);
     }
 }

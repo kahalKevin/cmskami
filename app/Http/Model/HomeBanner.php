@@ -4,10 +4,13 @@ namespace App\Http\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HomeBanner extends Model {
+    use SoftDeletes;
 	
     protected $table = 'cms_tm_fe_homebanner';
+    protected $dates = ['delete_at'];
 
     protected $fillable = [
         '_image_url',

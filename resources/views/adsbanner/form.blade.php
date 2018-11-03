@@ -110,7 +110,7 @@
                             <div class="form-group">
                                 <label for="_desc" class="control-label mb-1">Period</label>
                                     <div>
-                                        <input type='text' id='_period' name="_period" value="" class="form-control dateRangePickerAds" />
+                                        <input type='text' id='_period' name="_period" value="{{ isset($period) ? $period : '' }}"  class="form-control dateRangePickerAds" />
                                     </div>
 <!--                                 <script type="text/javascript">
                                     $(function () {

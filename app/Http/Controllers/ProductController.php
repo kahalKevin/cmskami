@@ -245,7 +245,8 @@ class ProductController extends Controller
         }   
         if(isset($request->categoryChild)) {
             $query = $query->where('product.category_id', '=' , $request->categoryChild);
-        }                                       
+        }
+        $query = $query->where('product.deleted_at', '=' , null);
             
         return Datatables::of($query->get())->addIndexColumn()->make(true);
     }
