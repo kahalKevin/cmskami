@@ -25,7 +25,9 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-
+        $payment_methods = Type::where('category_id', '=', 31)->get();
+        $allStatus = Type::where('category_id', '=', 33)->get();
+        return view('orders.index')->with(compact('request', 'payment_methods', 'allStatus'));
     }
     
     public function incomingOrderIndex(Request $request)
@@ -112,30 +114,73 @@ class OrderController extends Controller
 
     public function loadData(Request $request)
     {   
-
-    } 
-    
-    public function loadDataIncomingOrder(Request $request)
-    {   
-        $query = Order::query()
+        $query = Order::join('sys_type','fe_tx_order.status_id','sys_type.id')
+            ->select(
+                  'fe_tx_order.id',
+                  'fe_tx_order._email',
+                  'fe_tx_order._receiver_name',
+                  'fe_tx_order._receiver_phone',
+                  'fe_tx_order._address',
+                  'fe_tx_order._grand_total',
+                  'fe_tx_order.created_at',
+                  'sys_type._name'
+            )        
         ->where(function($q) use ($request) {
-          $q->where('id','LIKE', '%'.$request->keywordSearch.'%')
-            ->orWhere('_email','LIKE', '%'.$request->keywordSearch.'%')
-            ->orWhere('_receiver_name', 'LIKE', '%'.$request->keywordSearch.'%')
-            ->orWhere('_receiver_phone', 'LIKE', '%'.$request->keywordSearch.'%');
+          $q->where('fe_tx_order.id','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._email','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._receiver_name', 'LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._receiver_phone', 'LIKE', '%'.$request->keywordSearch.'%');
           });
 
         if(isset($request->paymentMethod)) {
-            $query = $query->where('payment_method_id', '=' , $request->paymentMethod);
+            $query = $query->where('fe_tx_order.payment_method_id', '=' , $request->paymentMethod);
         }
 
         if(isset($request->period)) {
             $period = explode(" - ", $request->period);
-            $query = $query->where('created_at', '>=' , $period[0]);
-            $query = $query->where('created_at', '<=' , $period[1]);
+            $query = $query->where('fe_tx_order.created_at', '>=' , $period[0]);
+            $query = $query->where('fe_tx_order.created_at', '<=' , $period[1]);
+        }
+
+        if(isset($request->status)) {
+            $query = $query->where('fe_tx_order.status_id', '=' , $request->status);
+        }
+                
+        return Datatables::of($query
+        )->addIndexColumn()->make(true);
+    } 
+    
+    public function loadDataIncomingOrder(Request $request)
+    {   
+        $query = Order::join('sys_type','fe_tx_order.status_id','sys_type.id')
+            ->select(
+                  'fe_tx_order.id',
+                  'fe_tx_order._email',
+                  'fe_tx_order._receiver_name',
+                  'fe_tx_order._receiver_phone',
+                  'fe_tx_order._address',
+                  'fe_tx_order._grand_total',
+                  'fe_tx_order.created_at',
+                  'sys_type._name'
+            )        
+        ->where(function($q) use ($request) {
+          $q->where('fe_tx_order.id','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._email','LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._receiver_name', 'LIKE', '%'.$request->keywordSearch.'%')
+            ->orWhere('fe_tx_order._receiver_phone', 'LIKE', '%'.$request->keywordSearch.'%');
+          });
+
+        if(isset($request->paymentMethod)) {
+            $query = $query->where('fe_tx_order.payment_method_id', '=' , $request->paymentMethod);
+        }
+
+        if(isset($request->period)) {
+            $period = explode(" - ", $request->period);
+            $query = $query->where('fe_tx_order.created_at', '>=' , $period[0]);
+            $query = $query->where('fe_tx_order.created_at', '<=' , $period[1]);
         }
          
-        $query = $query->where('status_id', '=' , 'STATUSORDER0');
+        $query = $query->where('fe_tx_order.status_id', '=' , 'STATUSORDER0');
                 
         return Datatables::of($query
         )->addIndexColumn()->make(true);

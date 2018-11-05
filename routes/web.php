@@ -32,6 +32,7 @@ Route::get('category-product/product-stock/load-data', 'ProductStockController@l
 Route::get('category-product/product-gallery/load-data', 'ProductGalleryController@loadData');
 
 Route::get('order-management/incoming-order/load-data', 'OrderController@loadDataIncomingOrder');
+Route::get('order-management/order/load-data', 'OrderController@loadData');
 
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
