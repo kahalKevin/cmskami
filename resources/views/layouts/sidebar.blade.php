@@ -39,7 +39,7 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Order Management</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Incoming Order</a></li>
+                            <li><i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Incoming Order</a></li>
                             <li><i class="fa fa-table"></i><a href="tables-data.html">All Order</a></li>
                         </ul>
                     </li>                    

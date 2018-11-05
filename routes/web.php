@@ -30,8 +30,8 @@ Route::get('category-product/category/get-category-child/{id}', 'CategoryControl
 Route::get('category-product/product/load-data', 'ProductController@loadData');
 Route::get('category-product/product-stock/load-data', 'ProductStockController@loadData');
 Route::get('category-product/product-gallery/load-data', 'ProductGalleryController@loadData');
-//Route::get('category-product/product/manage-stock', 'ProductController@indexStock');
-//Route::get('category-product/product/manage-gallery', 'ProductController@indexGallery');
+
+Route::get('order-management/incoming-order/load-data', 'OrderController@loadDataIncomingOrder');
 
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
@@ -61,6 +61,11 @@ Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@load
 	Route::resource('/termUser', 'TermUserController');
 	Route::resource('/aboutUs', 'AboutUsController');
 	Route::resource('/contactUs', 'ContactUsController');
+});
+
+\Route::group(['prefix' => 'order-management', 'middleware' => 'auth'], function () {
+	Route::resource('/order', 'OrderController');
+	Route::get('incoming-order', 'OrderController@incomingOrderIndex');
 });
 
 Auth::routes();
