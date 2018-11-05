@@ -75,7 +75,6 @@ class HomebannerController extends Controller
 
         $homebanners = HomeBanner::create($request->all() + [
             'created_by' =>  Auth::user()->id, 
-            '_active' =>  '1', 
             '_image_real_name' => $imageName, 
             '_image_enc_name' => $imageId.'.'.$extension, 
             '_image_url' => '/storage/images/homebanner/'.$imageId.'.'.$extension, 
@@ -87,7 +86,7 @@ class HomebannerController extends Controller
 
     public function loadData(Request $request)
     {
-        return Datatables::of(HomeBanner::query()->where('_active', '=' , '1'))->addIndexColumn()->make(true);
+        return Datatables::of(HomeBanner::query())->addIndexColumn()->make(true);
     }
 
     /**
@@ -123,6 +122,7 @@ class HomebannerController extends Controller
         $homebanner->_href_url = $request->_href_url;
         $homebanner->_href_open_type = $request->_href_open_type;
         $homebanner->_desc = $request->_desc;
+        $homebanner->_active = $request->_active;
         $homebanner->updated_by =  Auth::user()->id;
 
         if($request->hasFile('_upload_image')){
@@ -153,9 +153,8 @@ class HomebannerController extends Controller
     public function destroy($id)
     {
         $homebanner = HomeBanner::find($id);
-        $homebanner->_active = '0';
-        $homebanner->save();
+        $homebanner->delete();
         unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));    
-        \Session::flash('flash_message','You have just update '. $homebanner->_image_real_name);
+        \Session::flash('flash_message','You have just delete '. $homebanner->_image_real_name);
     }
 }

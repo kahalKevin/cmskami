@@ -248,6 +248,7 @@ class ProductController extends Controller
         }
         
         $query = $query->where('product.deleted_at', '=' , null);                                                          
+            
         return Datatables::of($query->get())->addIndexColumn()->make(true);
     }
 
