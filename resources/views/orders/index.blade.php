@@ -23,11 +23,26 @@
                 <strong>Filter</strong> Incoming Order
             </div>
             <div class="card-body card-block">
-                {{ Form::open(array('url'=>'order-management/incoming-order' , 'method'=>'GET' )) }}
+                {{ Form::open(array('url'=>'order-management/order' , 'method'=>'GET' )) }}
                   <div class="row form-group">
                       <div class="col col-md-3"><label for="keyword" class=" form-control-label">Keyword</label></div>
                       <div class="col-12 col-md-9"><input id="" name="keyword" class="form-control" value="{{ $request->keyword ? $request->keyword : '' }}" placeholder="order id/receiver email/ name phone"></div>
                   </div>
+
+
+                  <div class="row form-group">
+                      <div class="col col-md-3"><label for="status" class=" form-control-label">Status</label></div>
+                      <div class="col-12 col-md-9">
+                        <select class="form-control" name="status">
+                          <option value="" {{ !isset($request->status) ? 'selected' : '' }}>All</option>
+                          @foreach($allStatus as $as)
+                          <option value="{{ $as->id }}" {{ $request->status == $as->id? 'selected' : '' }}>{{ $as->_name }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                  </div>
+
+
                   <div class="row form-group">
                       <div class="col col-md-3"><label for="_period" class=" form-control-label">Period</label></div>
                       <div class="col-11 col-md-8"><input id="" name="_period" class="form-control dateRangePicker" value="{{ $request->_period ? $request->_period : '' }}" autocomplete="false"></div>
@@ -75,7 +90,7 @@
               </table>
           <script>
            $(function() {
-                var url_clean = "{{ url('order-management/incoming-order/load-data?keywordSearch='. $request->keyword.'&period='. $request->_period.'&paymentMethod='. $request->paymentMethod) }}"
+                var url_clean = "{{ url('order-management/order/load-data?keywordSearch='. $request->keyword.'&period='. $request->_period.'&status='.$request->status.'&paymentMethod='. $request->paymentMethod) }}"
                 var fix_url = url_clean.replace(/&amp;/g, '&');
                  $('#table').DataTable({
                  processing: true,
@@ -95,9 +110,9 @@
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +
-                                '<a href=order/' + row.id + ' class="btn btn-primary"role="button">Detail<a> ' +
+                                '<a href=product/' + row.id + '/edit class="btn btn-primary"role="button">Detail<a> ' +
                                 '<a href=product/' + row.id + '/edit class="btn btn-success"role="button">View Item<a> ' +
-                                '</br><a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-danger"role="button">Confirm Order<a> ' +
+                                '<a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-success"role="button">Confirm Order<a> ' +
                                 '</center>'
                             }
                           }                   
@@ -130,23 +145,5 @@
     $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
     });
-
-    function checkConfirmOrder(id) {
-      if (confirm('Are you sure want to confirm order?')) {
-          $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-              }
-          });
-          $.ajax({
-            type: "POST",
-            url: 'order/confirm-order/' + id,
-            success: function(result) {
-               location.reload();
-            }
-          });
-        }
-    }
 </script>
-
 @endsection
