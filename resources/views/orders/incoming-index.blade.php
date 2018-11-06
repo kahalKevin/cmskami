@@ -95,10 +95,9 @@
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +
-                                '<a href=product/' + row.id + '/edit class="btn btn-primary"role="button">Detail<a> ' +
+                                '<a href=order/' + row.id + ' class="btn btn-primary"role="button">Detail<a> ' +
                                 '<a href=product/' + row.id + '/edit class="btn btn-success"role="button">View Item<a> ' +
-                                '<a href="javascript:checkDelete('+ row.id +');" class="btn btn-danger"role="button">Delete<a> ' +
-                                '<a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-success"role="button">Confirm Order<a> ' +
+                                '</br><a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-danger"role="button">Confirm Order<a> ' +
                                 '</center>'
                             }
                           }                   
@@ -131,5 +130,23 @@
     $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
     });
+
+    function checkConfirmOrder(id) {
+      if (confirm('Are you sure want to confirm order?')) {
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+              }
+          });
+          $.ajax({
+            type: "POST",
+            url: 'order/confirm-order/' + id,
+            success: function(result) {
+               location.reload();
+            }
+          });
+        }
+    }
 </script>
+
 @endsection
