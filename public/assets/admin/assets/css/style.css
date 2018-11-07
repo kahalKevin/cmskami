@@ -432,6 +432,7 @@ canvas {
   max-width: 100%; }
 
 .btn {
+  margin-top:5px;
   border-radius: 3px; }
 
 .text-muted {
@@ -1370,7 +1371,7 @@ header .form-inline {
     .card .nav-tabs a {
       border-radius: 0;
       color: #b5bcc2;
-      font-size: 12px;
+      font-size: 21px;
       font-weight: 700;
       padding: .25em .5em;
       text-transform: uppercase; }

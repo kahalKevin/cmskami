@@ -432,6 +432,7 @@ canvas {
   max-width: 100%; }
 
 .btn {
+  margin-top:10px;
   border-radius: 3px; }
 
 .text-muted {
@@ -1647,6 +1648,7 @@ header .form-inline {
 
 /* Button Reset */
 .btn, .button {
+  margin-top:10px;
   display: inline-block;
   font-weight: 400;
   text-align: center;
