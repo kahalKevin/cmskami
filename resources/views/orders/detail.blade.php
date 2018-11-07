@@ -68,6 +68,7 @@
                                 </div>
                                 
                                 <div class="tab-pane fade" id="custom-nav-shipment-info" role="tabpanel" aria-labelledby="custom-nav-shipment-info-tab">
+                                	{{ Form::open(array('url'=>'order-management/order/confirm-shipment-order/'.$order->id , 'method' => 'POST')) }}
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Name</label>
 		                            	<input type="text" id="" disabled="" value="{{ $order->_receiver_name }}" class="form-control">
@@ -106,11 +107,14 @@
 		                            </div>
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">AWB No#</label>
-		                            	<input type="text" id="" value="{{ $order->_freight_awb_no }}" class="form-control">
-		                            </div>		                            
+		                            	<input type="text" id="_freight_awb_no" name="_freight_awb_no" value="{{ $order->_freight_awb_no }}" class="form-control">
+		                            </div>
+		                            <button type="submit" class="btn btn-success"><strong>Proccess</strong></button>
+		                            {!! Form::close() !!}		                            
 		                        </div>
 		                        
 		                        <div class="tab-pane fade" id="custom-nav-meta-info" role="tabpanel" aria-labelledby="custom-nav-meta-info-tab">
+		                        	{{ Form::open(array('url'=>'order-management/order/update-internal-note-order/'.$order->id , 'method' => 'POST')) }}
 		                        	<div class="form-group">
 		                            	<label for="" class=" form-control-label">Status</label>
 		                            	<input type="text" id="" disabled="" value="{{ $status_order->_name }}" class="form-control">
@@ -137,8 +141,10 @@
 		                            </div>
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Internal Note</label>
-		                            	<textarea name="textarea-input" disabled="" id="textarea-input" rows="9" class="form-control">{{ $order->_internal_note }}</textarea>
+		                            	<textarea name="_internal_note" id="_internal_note" rows="9" class="form-control">{{ $order->_internal_note }}</textarea>
 		                            </div>
+		                            <button type="submit" class="btn btn-success"><strong>Update</strong></button>
+		                            {!! Form::close() !!}
 		                        </div>
 		                        
 		                        <div class="tab-pane fade" id="custom-nav-payment-info" role="tabpanel" aria-labelledby="custom-nav-payment-info-tab">
@@ -219,7 +225,20 @@
 	                </tbody>
 	            </table>
 	        </div>
-	    </div>		
+	    </div>
+	    <div class="row">
+		    <div class="col-sm-6" align="right">
+		    	{{ Form::open(array('url'=>'order-management/order/ignore-order/'.$order->id , 'method' => 'POST')) }}
+	    			<button type="submit" class="btn btn-danger"><strong>Ignore</strong></button>
+				{!! Form::close() !!}	
+		    </div>
+			<div class="col-sm-6">
+			    {{ Form::open(array('url'=>'order-management/order/confirm-order/'.$order->id , 'method' => 'POST')) }}
+			    	<input type="hidden" id="" value="yes" name="isFromDetail" class="form-control">
+			    	<button type="submit" class="btn btn-success"><strong>Confirm</strong></button>
+				{!! Form::close() !!}		    
+		    </div>	    	
+		</div>		
     </div>    
 </div>
 @endsection

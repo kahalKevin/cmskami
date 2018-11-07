@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Redirect;
 use Datatables;
 use Auth;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -197,11 +198,40 @@ class OrderController extends Controller
         )->addIndexColumn()->make(true);
     } 
 
-    public function confirmOrder($id)
+    public function confirmOrder($id, Request $request)
     {
         $order = Order::find($id);
         $order->status_id = 'STATUSORDER2';
+        $order->_confirm_at = Carbon::now();
         $order->save();
+        if($request->isFromDetail == "yes"){
+            return redirect()->action('OrderController@incomingOrderIndex');
+        }
+    } 
+
+    public function ignoreOrder($id)
+    {
+        $order = Order::find($id);
+        $order->status_id = 'STATUSORDER5';
+        $order->save();
+        return redirect()->action('OrderController@incomingOrderIndex');
+    } 
+
+    public function confirmShipmentOrder($id, Request $request)
+    {
+        $order = Order::find($id);
+        $order->status_id = 'STATUSORDER3';
+        $order->_freight_awb_no = $request->_freight_awb_no;
+        $order->save();
+        return redirect()->back()->with('success', ['Success update status to GOODS  SHIPPED']);
     }
+
+    public function updateInternalNote($id, Request $request)
+    {
+        $order = Order::find($id);
+        $order->_internal_note = $request->_internal_note;
+        $order->save();
+        return redirect()->back()->with('success', ['Success update Internal Note']);
+    }    
 }
 

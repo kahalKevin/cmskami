@@ -67,6 +67,9 @@ Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@load
 \Route::group(['prefix' => 'order-management', 'middleware' => 'auth'], function () {
 	Route::resource('/order', 'OrderController');
 	Route::post('order/confirm-order/{id}', 'OrderController@confirmOrder');
+	Route::post('order/ignore-order/{id}', 'OrderController@ignoreOrder');
+	Route::post('order/confirm-shipment-order/{id}', 'OrderController@confirmShipmentOrder');	
+	Route::post('order/update-internal-note-order/{id}', 'OrderController@updateInternalNote');
 	Route::get('incoming-order', 'OrderController@incomingOrderIndex');
 });
 
