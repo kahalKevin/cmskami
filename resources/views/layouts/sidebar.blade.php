@@ -42,8 +42,24 @@
                             <li><i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Incoming Order</a></li>
                             <li><i class="fa fa-table"></i><a href="{{ url('/order-management/order') }}">All Order</a></li>
                         </ul>
-                    </li>                    
-                    <li><a href="index.html"><i class="menu-icon fa fa-laptop"></i>Report </a></li>
+                    </li> 
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Report</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li>
+                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Sales</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-table"></i><a href="{{ url('/report/registrant') }}">Registrant</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Subscriber</a>
+                            </li>
+                            <li>
+                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Contact Us</a>
+                            </li>
+                        </ul>
+                    </li>                                        
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
