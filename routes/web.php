@@ -34,6 +34,8 @@ Route::get('category-product/product-gallery/load-data', 'ProductGalleryControll
 Route::get('order-management/incoming-order/load-data', 'OrderController@loadDataIncomingOrder');
 Route::get('order-management/order/load-data', 'OrderController@loadData');
 
+Route::get('report/registrant/load-data', 'ReportController@loadDataRegistrant');
+
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
 	Route::post('/users/resetPassword/{id}', 'UserController@resetPassword');
@@ -71,6 +73,10 @@ Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@load
 	Route::post('order/confirm-shipment-order/{id}', 'OrderController@confirmShipmentOrder');	
 	Route::post('order/update-internal-note-order/{id}', 'OrderController@updateInternalNote');
 	Route::get('incoming-order', 'OrderController@incomingOrderIndex');
+});
+
+\Route::group(['prefix' => 'report', 'middleware' => 'auth'], function () {
+	Route::get('registrant', 'ReportController@indexRegistrant');
 });
 
 Auth::routes();
