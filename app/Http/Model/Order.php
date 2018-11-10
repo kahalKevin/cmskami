@@ -45,6 +45,7 @@ class Order extends Model {
         'status_id',
         '_internal_note',
         '_confirm_at',
+        '_shipment_date',
         'confirm_by_usercms',
         '_freight_awb_no',
         '_delivered_at',

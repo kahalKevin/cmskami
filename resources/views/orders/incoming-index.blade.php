@@ -96,8 +96,8 @@
                             mRender: function (data, type, row) {
                                 return '<center>' +
                                 '<a href=order/' + row.id + ' class="btn btn-primary"role="button">Detail<a> ' +
-                                '<a href=product/' + row.id + '/edit class="btn btn-success"role="button">View Item<a> ' +
-                                '</br><a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-danger"role="button">Confirm Order<a> ' +
+                                '<a href=order/item/' + row.id + ' class="btn btn-success"role="button">View Item<a> ' +
+                                '</br><a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-success"role="button">Confirm Order<a> ' +
                                 '</center>'
                             }
                           }                   

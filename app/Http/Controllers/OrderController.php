@@ -80,6 +80,21 @@ class OrderController extends Controller
         return view('orders.detail')->with(compact('order', 'freight_provider', 'status_order', 'payment_method', 'payment_gateway', 'order_detail_list'));
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showItem($id)
+    {
+        $order = Order::find($id);
+        $order_detail_list = OrderDetail::where('order_id', '=', $order->id)->get();
+
+        return view('orders.item')->with(compact('order', 'order_detail_list'));
+    }    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -222,6 +237,7 @@ class OrderController extends Controller
         $order = Order::find($id);
         $order->status_id = 'STATUSORDER3';
         $order->_freight_awb_no = $request->_freight_awb_no;
+        $order->_shipment_date = Carbon::now();
         $order->save();
         return redirect()->back()->with('success', ['Success update status to GOODS  SHIPPED']);
     }
