@@ -35,6 +35,8 @@ Route::get('order-management/incoming-order/load-data', 'OrderController@loadDat
 Route::get('order-management/order/load-data', 'OrderController@loadData');
 
 Route::get('report/registrant/load-data', 'ReportController@loadDataRegistrant');
+Route::get('report/subscriber/load-data', 'ReportController@loadDataSubscriber');
+Route::get('report/contact-us/load-data', 'ReportController@loadDataContactUs');
 
 \Route::group(['prefix' => 'master-data', 'middleware' => 'auth'], function () {
 	Route::resource('/users', 'UserController');
@@ -76,7 +78,10 @@ Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@load
 });
 
 \Route::group(['prefix' => 'report', 'middleware' => 'auth'], function () {
+	Route::get('sales', 'ReportController@indexSales');
 	Route::get('registrant', 'ReportController@indexRegistrant');
+	Route::get('subscriber', 'ReportController@indexSubscriber'); 
+	Route::get('contact-us', 'ReportController@indexContactUs');
 });
 
 Auth::routes();

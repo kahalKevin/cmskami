@@ -47,16 +47,16 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Report</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li>
-                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Sales</a>
+                                <i class="fa fa-table"></i><a href="{{ url('/report/sales') }}">Sales</a>
                             </li>
                             <li>
                                 <i class="fa fa-table"></i><a href="{{ url('/report/registrant') }}">Registrant</a>
                             </li>
                             <li>
-                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Subscriber</a>
+                                <i class="fa fa-table"></i><a href="{{ url('/report/subscriber') }}">Subscriber</a>
                             </li>
                             <li>
-                                <i class="fa fa-table"></i><a href="{{ url('/order-management/incoming-order') }}">Contact Us</a>
+                                <i class="fa fa-table"></i><a href="{{ url('/report/contact-us') }}">Contact Us</a>
                             </li>
                         </ul>
                     </li>                                        

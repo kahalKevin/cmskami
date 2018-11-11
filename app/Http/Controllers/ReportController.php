@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Model\FEUser as FEUser;
+use App\Http\Model\UserSubscriber as UserSubscriber; 
+use App\Http\Model\TxContactUs as TxContactUs;
+use App\Http\Model\Type as Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -11,13 +14,14 @@ use Datatables;
 use Auth;
 
 class ReportController extends Controller
-{
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{    
+    public function indexSales(Request $request)
+    {
+        $status = Type::where('category_id', '=', 33)->get();
+        $payment_method = Type::where('category_id', '=', 31)->get();
+        return view('reports.index-sales')->with(compact('request', 'status', 'payment_method'));
+    }
+
     public function indexRegistrant(Request $request)
     {
         $total_user = FEUser::all()->count();
@@ -30,7 +34,22 @@ class ReportController extends Controller
         return view('reports.index-registrant')->with(compact('total_user', 'total_user_phone_verified', 'total_user_email_verified', 'total_user_not_verified' ,'request'));
     }
 
+    public function indexSubscriber(Request $request)
+    {
+        $total_user_subscribe = UserSubscriber::where('_unsub_at', '!=', null)->count();
+        $total_user_unsubscribe = UserSubscriber::where('_unsub_at', '=', null)->count();
+
+        return view('reports.index-subscriber')->with(compact('total_user_subscribe', 'total_user_unsubscribe', 'request'));
+    } 
+
     
+    public function indexContactUs(Request $request)
+    {
+        $total = TxContactUs::all()->count();
+
+        return view('reports.index-contact-us')->with(compact('total', 'request'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -73,6 +92,40 @@ class ReportController extends Controller
                 $query = $query->where('_verified_email_at', '=', null);
             }
         }                          
+
+        return Datatables::of($query)->addIndexColumn()->make(true);
+    }
+
+    public function loadDataSubscriber(Request $request)
+    {   
+        $query = UserSubscriber::query();
+
+        if(isset($request->period)) {
+            $period = explode(" - ", $request->period);
+            $query = $query->where('create_date', '>=' , $period[0]);
+            $query = $query->where('create_date', '<=' , $period[1]);
+        }
+
+        if(isset($request->status) && $request->status != 'all') {
+            if($request->status == 'subscribe'){
+                $query = $query->where('_unsub_at', '=', null);
+            }  else {
+                $query = $query->where('_unsub_at', '!=', null);
+            }
+        }                          
+
+        return Datatables::of($query)->addIndexColumn()->make(true);
+    } 
+
+    public function loadDataContactUs(Request $request)
+    {   
+        $query = TxContactUs::query();
+
+        if(isset($request->period)) {
+            $period = explode(" - ", $request->period);
+            $query = $query->where('created_at', '>=' , $period[0]);
+            $query = $query->where('created_at', '<=' , $period[1]);
+        }
 
         return Datatables::of($query)->addIndexColumn()->make(true);
     }    

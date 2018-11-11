@@ -19,7 +19,7 @@
 	<meta name="_token" content="{{ csrf_token() }}"/>
 	<div class="row">
 	  <div class="col-sm-12">
-	    <h2><strong>Report - Registrant</strong></h2>     
+	    <h2><strong>Report - Contact Us</strong></h2>     
 	  </div>
 	</div>
 	<hr>
@@ -30,26 +30,14 @@
 	    <div class="col-lg-7">
 	        <div class="card">
 	            <div class="card-header">
-	                <strong>Filter</strong> Report - Registrant
+	                <strong>Filter</strong> Report - Contact Us
 	            </div>
 	            <div class="card-body card-block">
-	                {{ Form::open(array('url'=>'report/registrant' , 'method'=>'GET' )) }}
+	                {{ Form::open(array('url'=>'report/contact-us' , 'method'=>'GET' )) }}
 	                  <div class="row form-group">
 	                      <div class="col col-md-3"><label for="_period" class=" form-control-label">Period</label></div>
 	                      <div class="col-11 col-md-8"><input id="" name="_period" class="form-control dateRangePicker" value="{{ $request->_period ? $request->_period : '' }}" autocomplete="false"></div>
 	                  </div>                  
-	                  <div class="row form-group">
-	                      <div class="col col-md-3"><label for="verified" class=" form-control-label">Verified</label></div>
-	                      <div class="col-12 col-md-9">
-	                        <select class="form-control" name="verified">
-	                          	<option value="all" {{ isset($request->verified) && $request->verified == 'all' ? 'selected' : '' }}>All</option>
-	                          	<option value="email" {{ isset($request->verified) && $request->verified == 'email' ? 'selected' : '' }}>Email</option>
-		                        <option value="phone" {{ isset($request->verified) && $request->verified == "phone" ? 'selected' : '' }}>Phone</option>
-		                        <option value="notverified" {{ isset($request->verified) && $request->verified == 'notverified' ? 'selected' : '' }}>Not Verified</option>
-		                    </select>
-	                      </div>
-	                  </div>
-
 	                  <div>
 	                      <button type="submit" class="btn btn-primary"><strong>Search</strong></button>
 	                  </div>
@@ -64,17 +52,8 @@
 	            </div>
 	            <div class="card-body card-block">
 	                  <div class="row form-group">
-	                  	<h4><strong>Total User : {{ $total_user }}</strong></h4>
+	                  	<h4><strong>Total : {{ $total }}</strong></h4>
 	                  </div>
-	                  <div class="row form-group">
-	                  	<h4><strong>Total Verified Email : {{ $total_user_email_verified }}</strong></h4>
-	                  </div>
-	                  <div class="row form-group">
-	                  	<h4><strong>Total Verified Phone : {{ $total_user_phone_verified }}</strong></h4>
-	                  </div>
-	                  <div class="row form-group">
-	                  	<h4><strong>Total Not Verified : {{ $total_user_not_verified }}</strong></h4>
-	                  </div>                  
 	            </div>            
 	        </div>
 	    </div>
@@ -87,28 +66,23 @@
 	    <div class="col-sm-12">
 	        <div class="card">  
 	            <div class="card-header">
-	                <strong class="card-title">List </strong>Registrant
+	                <strong class="card-title">List </strong>Contact Us
 	            </div>
 	            <div class="card-body">
 	              <table class="table table-bordered" id="table" class="col-sm-12">
 	                 <thead>
 	                    <tr>
 	                      <th width="5%">ID</th>
-	                      <th width="10%">Email</th>
-	                      <th width="10%">Email Verified</th>
-	                      <th width="15%">Phone</th>                      
-	                      <th width="15%">Phone Verified</th>
-	                      <th width="5%">First Name</th>
-	                      <th width="5%">Last Name</th>
-	                      <th width="5%">Gender</th>
-	                      <th width="15%">Birthdate</th>
-	                      <th width="15%">Created Date</th>
+	                      <th width="">Name</th>
+	                      <th width="">Email</th>	                      
+	                      <th width="">Message</th>
+	                      <th width="">Created Date</th>
 	                    </tr>
 	                 </thead>
 	              </table>
 	          <script>
 	           $(function() {
-	                var url_clean = "{{ url('report/registrant/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
+	                var url_clean = "{{ url('report/contact-us/load-data?period='. $request->_period) }}"
 	                var fix_url = url_clean.replace(/&amp;/g, '&');
 	                 $('#table').DataTable({
 	                 dom: 'Bfrtip',
@@ -124,14 +98,9 @@
 	                 ajax: fix_url,
 	                 columns: [
 	                          { data: 'id', defaultContent: '' },
+	                          { data: '_name', name: '_name' },
 	                          { data: '_email', name: '_email' },
-	                          { data: '_verified_email_at', name: '_verified_email_at' },
-	                          { data: '_phone', name: '_phone' },
-							  { data: '_verified_phone_at', name: '_verified_phone_at' },
-	                          { data: '_first_name', name: '_first_name' },
-	                          { data: '_last_name', name: '_last_name' },
-	                          { data: 'gender', name: 'gender' },
-	                          { data: '_dob', name: '_dob' },
+	                          { data: '_message', name: '_message' },
 	                          { data: 'created_at', name: 'created_at' }
 	                       ]
 	              });
