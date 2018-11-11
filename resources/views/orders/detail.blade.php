@@ -133,7 +133,7 @@
 		                            </div>
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Shipment Date</label>
-		                            	<input type="text" id="" disabled="" value="" class="form-control">
+		                            	<input type="text" id="" disabled="" value="{{ $order->_shipment_date }}" class="form-control">
 		                            </div>
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Delivered At</label>

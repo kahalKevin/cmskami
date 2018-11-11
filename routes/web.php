@@ -75,6 +75,7 @@ Route::get('web-management/adsInventory/load-data', 'AdsInventoryController@load
 	Route::post('order/confirm-shipment-order/{id}', 'OrderController@confirmShipmentOrder');	
 	Route::post('order/update-internal-note-order/{id}', 'OrderController@updateInternalNote');
 	Route::get('incoming-order', 'OrderController@incomingOrderIndex');
+	Route::get('order/item/{id}', 'OrderController@showItem');
 });
 
 \Route::group(['prefix' => 'report', 'middleware' => 'auth'], function () {
