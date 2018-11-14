@@ -133,7 +133,9 @@ class HomebannerController extends Controller
             if(!Storage::disk('homebanner')->put($imageId.'.'.$extension,  File::get($banner))){
                 dd(false);
             }
-            unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));
+            if(file_exists(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name))){
+                unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));
+            }
             $homebanner->_image_real_name = $imageName;
             $homebanner->_image_enc_name = $imageId.'.'.$extension;
             $homebanner->_image_url = '/storage/images/homebanner/'.$imageId.'.'.$extension;
@@ -154,7 +156,9 @@ class HomebannerController extends Controller
     {
         $homebanner = HomeBanner::find($id);
         $homebanner->delete();
-        unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));    
+        if(file_exists(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name))){
+            unlink(storage_path("app/public/images/homebanner/".$homebanner->_image_enc_name));
+        }
         \Session::flash('flash_message','You have just delete '. $homebanner->_image_real_name);
     }
 }

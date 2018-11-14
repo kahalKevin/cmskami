@@ -184,7 +184,7 @@ class ProductController extends Controller
 
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just update '. $product->_name);
-        return redirect()->route("product.index");  
+        return redirect()->route("product.index");
     }
 
     /**
