@@ -36,10 +36,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $category_parents = Category::query()->where('parent_category_id', '=', null)->get();
+        $category_parents = Category::query()->get();
         $gender_allocations = Type::query()->where('category_id', 11)->get();
-        if(isset($request->category_parent))
-        $category_childs = Category::query()->where('parent_category_id', '=' , $request->category_parent)->get();    
+
         return view('categories.index')->with(compact('category_parents', 'gender_allocations', 'request', 'category_childs'));
     }
 
@@ -64,22 +63,29 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-                '_upload_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+                '_upload_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $this->validate($request, $this->rules_create);
+        
+        if($request->_upload_image != null){
+            $image = $request->file('_upload_image');
 
-         $image = $request->file('_upload_image');
-
-        $imageName = $image->getClientOriginalName();
-        $path = $image->store('public/images/category');
-        $publicPath = \Storage::url($path);
-        $category = Category::create($request->all() + [
-            'created_by' =>  Auth::user()->id,
-            '_image_real_name' => $imageName, 
-            '_image_enc_name' => $image->hashName(), 
-            '_image_url' => $publicPath
-        ]);
+            $imageName = $image->getClientOriginalName();
+            $path = $image->store('public/images/category');
+            $publicPath = \Storage::url($path);
+            $category = Category::create($request->all() + [
+                'created_by' =>  Auth::user()->id,
+                '_image_real_name' => $imageName, 
+                '_image_enc_name' => $image->hashName(), 
+                '_image_url' => $publicPath
+            ]);
+        } else {
+            $category = Category::create($request->all() + [
+                'created_by' =>  Auth::user()->id
+            ]);
+        }
+        
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just created new Category');
         Redis::del(env('REDIS_PREFIX').':categories');
@@ -206,8 +212,8 @@ class CategoryController extends Controller
                     ->select(
                         'cat1.id',
                         'cat1._name AS category_name', 
-                        'cat2._name AS parent_category_name',
-                        'type._name AS gender_name',
+                        \DB::raw('IFNULL(cat2._name, "-") AS parent_category_name'),
+                        \DB::raw('IFNULL(type._name, "All") AS gender_name'),
                         'cat1._slug',
                         'cat1._active'                        
                         )

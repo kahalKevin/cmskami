@@ -25,7 +25,7 @@
                 {{ Form::open(array('url'=>'master-data/users' , 'method'=>'GET' )) }}
                     <div class="row form-group">
                         <div class="col col-md-3"><label for="keyword" class=" form-control-label">Keyword</label></div>
-                        <div class="col-12 col-md-9"><input id="" name="keyword" class="form-control" value="{{ $request->keyword ? $request->keyword : '' }}"></div>
+                        <div class="col-12 col-md-9"><input type="text" name="keyword" class="form-control" value="{{ $request->keyword ? $request->keyword : '' }}"></div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-3"><label for="status" class=" form-control-label">Active?</label></div>

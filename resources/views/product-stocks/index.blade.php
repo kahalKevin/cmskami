@@ -55,11 +55,8 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="_available" class="control-label mb-1">Available?</label>
-                                <select class="form-control" name="_available">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
+                                <label for="_available" class="control-label mb-1">Stock</label>
+                                <input class="form-control" type="number" name="_stock">
                             </div>
                         </div>
                     </div>                      
@@ -84,7 +81,7 @@
                     <tr>
                       <th width="5%">ID</th>
                       <th>Size</th>
-                      <th>Status</th>
+                      <th>Stock QTY</th>
                       <th width="30%"><center>Action</center></th>
                     </tr>
                  </thead>
@@ -99,15 +96,7 @@
                  columns: [
                           { data: 'id', defaultContent: '' },
                           { data: 'size_name', name: 'size_name' },
-                          {
-                              mRender: function (data, type, row) {
-                              if (row._available == '1') {
-                                    return '<i class="fa fa-check-square"></i> Available'
-                                } else {
-                                    return '<i class="fa fa-square-o"></i> Not available'
-                                }
-                              }                            
-                          },
+                          { data: '_stock', name: '_stock' },
                           {
                             mRender: function (data, type, row) {
                                 return '<center>' +

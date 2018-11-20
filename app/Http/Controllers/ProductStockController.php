@@ -53,7 +53,7 @@ class ProductStockController extends Controller
             'created_by' =>  Auth::user()->id,
             'product_id' => $request->product_id, 
             'size_id' => $request->size_id, 
-            '_available' => $request->_available
+            '_stock' => $request->_stock
         ]);
 
         //PUT HERE AFTER YOU SAVE
@@ -113,7 +113,7 @@ class ProductStockController extends Controller
          ->select(
                   'cms_tm_product_stock.id',
                   'cms_tm_size._name AS size_name',
-                  'cms_tm_product_stock._available'
+                  'cms_tm_product_stock._stock'
           )
          ->where('cms_tm_product_stock.product_id', '=' , $request->product_id);
         return Datatables::of($query->get())->addIndexColumn()->make(true);

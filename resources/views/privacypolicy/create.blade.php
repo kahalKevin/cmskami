@@ -1,5 +1,5 @@
 @extends('layouts.admin_template')
-<script src="/ckeditor/ckeditor.js"></script>
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 @section('content')
 <div class="row">
     <div class="col-sm-12">

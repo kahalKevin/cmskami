@@ -3,11 +3,12 @@
 <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/flag-icon.min.css")}}">
 <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/cs-skin-elastic.css")}}">
 <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/lib/chosen/chosen.min.css")}}">
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 
 @section('content')
 <div class="row">
 	<div class="col-sm-12">
-		<h2><strong>Create</strong> Category&Product - Product</h2>			
+		<h2><strong>Create</strong> Category & Product - Product</h2>			
 	</div>
 </div>
 

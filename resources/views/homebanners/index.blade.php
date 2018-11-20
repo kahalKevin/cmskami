@@ -53,7 +53,7 @@
                           { data: 'id', defaultContent: '' },
                           { data: '_image_url', name: '_image_url',
                             render: function( data, type, full, meta ) {
-                                return "<img src=\"" + data + "\"/>";
+                                return "<img src=\"{{ url('/') }}" + data + "\"/>";
                             }
                           },
                           { data: '_title', name: '_title' },
