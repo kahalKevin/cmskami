@@ -111,6 +111,9 @@
                                     <div class="form-group">
                                         <label for="_desc_product" class="control-label mb-1">Product Desc</label>
                                         <textarea name="_desc_product" id="_desc_product" rows="9" placeholder="" class="form-control">{{ isset($product) ? $product->_desc_product : '' }}</textarea>
+                                        <script>
+                                            CKEDITOR.replace( '_desc_product' );
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -119,6 +122,9 @@
                                     <div class="form-group">
                                         <label for="_desc_delivery" class="control-label mb-1">Delivery Desc</label>
                                         <textarea name="_desc_delivery" id="_desc_delivery" rows="9" placeholder="" class="form-control">{{ isset($product) ? $product->_desc_delivery : '' }}</textarea>
+                                        <script>
+                                            CKEDITOR.replace( '_desc_delivery' );
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -127,6 +133,9 @@
                                     <div class="form-group">
                                         <label for="_desc_size" class="control-label mb-1">Size Desc</label>
                                         <textarea name="_desc_size" id="_desc_size" rows="9" placeholder="" class="form-control">{{ isset($product) ? $product->_desc_size : '' }}</textarea>
+                                        <script>
+                                            CKEDITOR.replace( '_desc_size' );
+                                        </script>
                                     </div>
                                 </div>
                             </div>                                                        

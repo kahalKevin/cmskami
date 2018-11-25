@@ -46,10 +46,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {   
-        $category_parents = Category::query()->where('parent_category_id', '=', null)->get();
+        $category_parents = Category::query()->get();
         $gender_allocations = Type::query()->where('category_id', 11)->get();
-        if(isset($request->category_parent))
-        $category_childs = Category::query()->where('parent_category_id', '=' , $request->category_parent)->get();    
+
         return view('products.index')->with(compact('category_parents', 'gender_allocations', 'request', 'category_childs'));
     }
 
@@ -94,10 +93,12 @@ class ProductController extends Controller
             '_image_enc_name' => $image->hashName(), 
             '_image_url' => $publicPath
         ]);
-
-        foreach ($request->tags as $tag) {
-            $this->storeTags($tag, $product->id);
-        }             
+        
+        if (is_array($request->tags) && count($request->tags) > 0) {
+            foreach ($request->tags as $tag) {
+                $this->storeTags($tag, $product->id);
+            }
+        }
 
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just created new Product');
@@ -178,13 +179,16 @@ class ProductController extends Controller
 
         //Update Product Tags
         $tags_deleted = ProductTag::where('product_id',$id)->delete();
-        foreach ($request->tags as $tag) {
-            $this->storeTags($tag, $id);
-        }  
+        
+        if (is_array($request->tags) && count($request->tags) > 0) {
+            foreach ($request->tags as $tag) {
+                $this->storeTags($tag, $id);
+            }  
+        }
 
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just update '. $product->_name);
-        return redirect()->route("product.index");  
+        return redirect()->route("product.index");
     }
 
     /**

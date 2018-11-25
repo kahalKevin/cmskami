@@ -60,9 +60,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="_desc" class="control-label mb-1">Desc</label>
-                                <textarea name="_desc" id="_desc" rows="9" placeholder="" class="form-control">
-                                  
-                                </textarea>
+                                <textarea name="_desc" id="_desc" rows="9" placeholder="" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>  
@@ -117,7 +115,7 @@
                           {
                               mRender: function (data, type, row) {
                               if (row._url != null && row._real_name != null) {
-                                    return '<a target="_blank" href=' + row._url + '>' + row._real_name + '<a> '
+                                    return '<img src={{ url("/") }}' + row._url + '>'
                                 } else {
                                     return '-'
                                 }

@@ -19,7 +19,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <strong>Filter</strong> Club
+                <strong>Filter</strong> Categories
             </div>
             <div class="card-body card-block">
                 {{ Form::open(array('url'=>'category-product/category' , 'method'=>'GET' )) }}
@@ -35,20 +35,7 @@
                                 @endforeach
                               </select>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col col-md-2"><label for="category_child" class=" form-control-label"></label></div>
-                            <div class="col-12 col-md-9">
-                              <select class="form-control" name="category_child">
-                                <option value="">--- Select ---</option>
-                                @if(isset($category_childs))
-                                @foreach($category_childs as $cc)
-                                  <option value="{{ $cc->id }}" {{ $request->category_child == $cc->id? 'selected' : '' }}>{{ $cc->_name }}</option>
-                                @endforeach
-                                @endif
-                              </select>
-                            </div>
-                        </div>                                            
+                        </div>                                          
                       </div>
                       <div class="col-lg-6">
                         <div class="row form-group">
@@ -91,7 +78,7 @@
     <div class="col-sm-12">
         <div class="card">  
             <div class="card-header">
-                <strong class="card-title">List </strong>Club
+                <strong class="card-title">List </strong>Categories
             </div>
             <div class="card-body">
               <table class="table table-bordered" id="table">
@@ -194,7 +181,7 @@
           type: "DELETE",
           url: 'category/' + id,
           success: function(result) {
-             //location.reload();
+             location.reload();
           }
         });
       }

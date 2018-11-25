@@ -201,7 +201,9 @@ class AdsInventoryController extends Controller
             if(!Storage::disk('adsbanner')->put($imageId.'.'.$extension,  File::get($banner))){
                 dd(false);
             }
-            unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));
+            if(file_exists(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name))){
+              unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));
+            }
             $adsbanner->_image_real_name = $imageName;
             $adsbanner->_image_enc_name = $imageId.'.'.$extension;
             $adsbanner->_image_url = '/storage/images/adsbanner/'.$imageId.'.'.$extension;
@@ -222,7 +224,9 @@ class AdsInventoryController extends Controller
     {
         $adsbanner = AdsBanner::find($id);
         $adsbanner->delete();
-        unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));    
+        if(file_exists(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name))){
+            unlink(storage_path("app/public/images/adsbanner/".$adsbanner->_image_enc_name));
+        }
         \Session::flash('flash_message','You have just deleted '. $adsbanner->_image_real_name);
     }
 }

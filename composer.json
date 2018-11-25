@@ -11,6 +11,7 @@
         "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "~5.0",
+        "predis/predis": "^1.1",
         "yajra/laravel-datatables-oracle": "*"
     },
     "require-dev": {

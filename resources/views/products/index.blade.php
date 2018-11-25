@@ -20,7 +20,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <strong>Filter</strong> Club
+                <strong>Filter</strong> Products
             </div>
             <div class="card-body card-block">
                 {{ Form::open(array('url'=>'category-product/product' , 'method'=>'GET' )) }}
@@ -37,19 +37,6 @@
                               </select>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col col-md-2"><label for="category_child" class=" form-control-label"></label></div>
-                            <div class="col-12 col-md-9">
-                              <select class="form-control" name="category_child">
-                                <option value="">--- Select ---</option>
-                                @if(isset($category_childs))
-                                @foreach($category_childs as $cc)
-                                  <option value="{{ $cc->id }}" {{ $request->category_child == $cc->id? 'selected' : '' }}>{{ $cc->_name }}</option>
-                                @endforeach
-                                @endif
-                              </select>
-                            </div>
-                        </div> 
                         <div class="row form-group">
                             <div class="col col-md-2"><label for="gender_allocation" class=" form-control-label">Gender Allocation</label></div>
                             <div class="col-12 col-md-9">
@@ -96,7 +83,7 @@
     <div class="col-sm-12">
         <div class="card">  
             <div class="card-header">
-                <strong class="card-title">List </strong>Club
+                <strong class="card-title">List </strong>Products
             </div>
             <div class="card-body">
               <table class="table table-bordered" id="table">
@@ -129,7 +116,7 @@
                           {
                               mRender: function (data, type, row) {
                               if (row._image_url != null && row._image_real_name != null) {
-                                    return '<a target="_blank" href=' + row._image_url + '>' + row._image_real_name + '<a> '
+                                    return '<img src="{{ url("/") }}' +  row._image_url + '" />'
                                 } else {
                                     return '-'
                                 }

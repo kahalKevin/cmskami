@@ -69,8 +69,8 @@
 	                      </div>
 	                  </div>
 
-	                  <div>
-	                      <button type="submit" class="btn btn-primary"><strong>Search</strong></button>
+	                  <div id="notprint">
+	                  	<button type="submit" class="btn btn-primary"><strong>Search</strong></button>
 	                  </div>
 	              {!! Form::close() !!}
 	            </div>            
@@ -121,7 +121,7 @@
 	    </div>
 	</div>
 	<div class="row">    
-	    <div align="right" class="col-sm-12">
+	    <div id="notprint2" align="right" class="col-sm-12">
 	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export Excel</strong></button>
 	        <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button>
 	    </div>
@@ -135,6 +135,7 @@
 	                 <thead>
 	                    <tr>
 	                      <th width="5%">ID</th>
+	                      <th width="10%">Email</th>
 	                      <th width="10%">Order ID</th>
 	                      <th width="10%">Date</th>
 	                      <th width="15%">Emil</th>                      
@@ -147,35 +148,38 @@
 	                 </thead>
 	              </table>
 	          <script>
-	       //     $(function() {
-	       //          var url_clean = "{{ url('report/registrant/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
-	       //          var fix_url = url_clean.replace(/&amp;/g, '&');
-	       //           $('#table').DataTable({
-	       //           dom: 'Bfrtip',
-        // buttons: [
-        //     'copyHtml5',
-        //     'excelHtml5',
-        //     'csvHtml5',
-        //     'pdfHtml5'
-        // ],
-	       //           processing: true,
-	       //           serverSide: true,
-	       //           searching: false,
-	       //           ajax: fix_url,
-	       //           columns: [
-	       //                    { data: 'id', defaultContent: '' },
-	       //                    { data: '_email', name: '_email' },
-	       //                    { data: '_verified_email_at', name: '_verified_email_at' },
-	       //                    { data: '_phone', name: '_phone' },
-							 //  { data: '_verified_phone_at', name: '_verified_phone_at' },
-	       //                    { data: '_first_name', name: '_first_name' },
-	       //                    { data: '_last_name', name: '_last_name' },
-	       //                    { data: 'gender', name: 'gender' },
-	       //                    { data: '_dob', name: '_dob' },
-	       //                    { data: 'created_at', name: 'created_at' }
-	       //                 ]
-	       //        });
-	       //     });
+	            $(function() {
+	                 var url_clean = "{{ url('report/registrant/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
+	                 var fix_url = url_clean.replace(/&amp;/g, '&');
+	                  $('#table').DataTable({
+	                  dom: 'Bfrtip',
+         buttons: [
+             'copyHtml5',
+             'excelHtml5',
+             'csvHtml5',
+             {
+                extend: 'pdfHtml5',
+                messageTop: "Total Amount : \nTotal freight : \nGrand Total : "
+             }
+         ],
+	                  processing: true,
+	                  serverSide: true,
+	                  searching: false,
+	                  ajax: fix_url,
+	                  columns: [
+	                           { data: 'id', defaultContent: '' },
+	                           { data: '_email', name: '_email' },
+	                           { data: '_verified_email_at', name: '_verified_email_at' },
+	                           { data: '_phone', name: '_phone' },
+							   { data: '_verified_phone_at', name: '_verified_phone_at' },
+	                           { data: '_first_name', name: '_first_name' },
+	                           { data: '_last_name', name: '_last_name' },
+	                           { data: 'gender', name: 'gender' },
+	                           { data: '_dob', name: '_dob' },
+	                           { data: 'created_at', name: 'created_at' }
+	                        ]
+	               });
+	            });
 	          </script>
 	          </div>        
 	        </div>
@@ -205,12 +209,38 @@
     });
 
 	function printDiv(sectionName) {
-	    //var printContents = document.getElementById(sectionName).innerHTML;
-//	    <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/style.css")}}">
-	    var prtContent = document.getElementById(sectionName);
-        var WinPrint = window.open();
+		var stringNotToPrint = `	                  <div id="notprint">
+	                  	<button type="submit" class="btn btn-primary"><strong>Search</strong></button>
+	                  </div>`;
+		var stringNotToPrint2 = `	    <div id="notprint2" align="right" class="col-sm-12">
+	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export Excel</strong></button>
+	        <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button>
+	    </div>`;
 
-        WinPrint.document.write(prtContent.innerHTML);       
+	    var prtContent = document.getElementById(sectionName);
+
+        var allContent = prtContent.innerHTML;
+        allContent = allContent.replace(stringNotToPrint, "");
+        allContent = allContent.replace(stringNotToPrint2, "");
+
+        var inlineCss = `
+        	@media print{
+				p {
+				    font-family: "Comic Sans MS", cursive, sans-serif !important;
+				}        		
+        	}
+		`;
+        var WinPrint = window.open();
+        allContent = '</head><body><div class="pageprint">' + allContent;
+        allContent = '<link rel="stylesheet" href="assets/admin/assets/css/style.css" media="print">' + allContent;
+        allContent = '<link rel="stylesheet" href="assets/admin/assets/css/bootstrap.min.css" media="print">' + allContent;
+        allContent = '<style>' + inlineCss + '</style>' + allContent;
+        allContent = '<base href="' + location.origin + '/">' + allContent;
+        allContent = '<html><head><title></title>' + allContent;
+        allContent = '<!DOCTYPE html>' + allContent;
+        allContent += '</div></body></html>';
+        console.log(allContent);
+        WinPrint.document.write(allContent);
         WinPrint.document.close();
         WinPrint.focus();
         WinPrint.print();

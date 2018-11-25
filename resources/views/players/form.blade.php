@@ -127,7 +127,7 @@
             var league_id = $(this).val();
             if(league_id) {
                 $.ajax({
-                    url: '/master-data/leagues/get-clubs/'+league_id,
+                    url: '{{ url("/") }}/master-data/leagues/get-clubs/'+league_id,
                     type:"GET",
                     dataType:"json",
                     beforeSend: function(){
