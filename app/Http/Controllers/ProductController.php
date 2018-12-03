@@ -76,7 +76,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-                '_upload_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+                '_upload_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:6000',
         ]);
 
         $this->validate($request, $this->rules_create);

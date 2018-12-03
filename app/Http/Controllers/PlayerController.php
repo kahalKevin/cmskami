@@ -19,7 +19,7 @@ class PlayerController extends Controller
     protected $rules = array(
             'club_id'       => 'required',
             '_name'         => 'required',
-            '_number_shirt' => 'required'
+            '_number_shirt' => 'required|numeric'
     );
     
     /**

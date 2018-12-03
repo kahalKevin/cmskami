@@ -29,7 +29,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="_name" class="control-label mb-1">Name</label>
-                                <input id="_name" name="_name" type="text" class="form-control" value="{{ isset($sleeves) ? $sleeves->_name : '' }}" placeholder="">
+                                <input id="_name" name="_name" type="text" class="form-control hashtag" value="{{ isset($sleeves) ? $sleeves->_name : '' }}" placeholder="">
                             </div>
                         </div>
                     </div>

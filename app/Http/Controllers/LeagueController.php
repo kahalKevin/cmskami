@@ -153,7 +153,7 @@ class LeagueController extends Controller
     }
 
     public function getClubs($id) {
-        $clubs = Club::query()->where("league_id",$id)->pluck("_name","id");
+        $clubs = Club::select('_name', 'id')->where("league_id",$id)->get();
         return json_encode($clubs);
     }
 }

@@ -12,11 +12,18 @@ use Datatables;
 class UserController extends Controller
 {
     //For Validation
-    protected $rules = array(
-            '_email'       => 'required|email',
+    protected $rulesCreate = array(
+            '_email'       => 'required|email|unique:cms_tm_user,_email,{$id},id,deleted_at,NULL',
             '_password'      => 'required|min:6',
-            '_phone' => 'required|numeric',
+            '_phone' => 'digits_between:10,16|required|numeric',
             '_fullname' => 'required'
+    );
+
+    protected $rulesEdit = array(
+        '_email'       => 'required|email',
+        '_password'      => 'required|min:6',
+        '_phone' => 'digits_between:10,16|required|numeric',
+        '_fullname' => 'required'
     );
     
     /**
@@ -47,15 +54,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, $this->rules);
+        $this->validate($request, $this->rulesCreate);
         // store
         $user = new User();
-            $user->user_level_id = "USRLVL01";
-            $user->_email = $request->_email;
-            $user->_password = bcrypt($request->_password);
-            $user->_full_name  = $request->_fullname;
-            $user->_phone = $request->_phone;
-            $user->_active = $request->_active;;
+        $user->user_level_id = "USRLVL01";
+        $user->_email = $request->_email;
+        $user->_password = bcrypt($request->_password);
+        $user->_full_name  = $request->_fullname;
+        $user->_phone = $request->_phone;
+        $user->_active = $request->_active;;
+
         $user->save();
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just created new user.');
@@ -97,7 +105,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, $this->rules);
+        $this->validate($request, $this->rulesEdit);
         $user = User::find($id);
             if($user->_password != $request->_password) {
                 $user->_password = bcrypt($request->_password);
@@ -150,10 +158,13 @@ class UserController extends Controller
         )->addIndexColumn()->make(true);
     }
 
-    public function resetPassword($id)
+    public function resetPassword(Request $request, $id)
     {   
         $user = User::find($id);
         $user->_password = bcrypt("superstore@2018");
+
+        $request->session()->flash('flash_message', 'Your password changes to superstore@2018');
+
         $user->save();
     }
 }

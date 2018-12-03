@@ -1,7 +1,7 @@
 @extends('layouts.admin_template')
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>    
 
 @section('content')
@@ -150,7 +150,7 @@
                         $('select[name="club_id"]').append('<option value="">--- Club ---</option>');
                         $.each(data, function(key, value){
 
-                            $('select[name="club_id"]').append('<option value="'+ key +'">' + value + '</option>');
+                            $('select[name="club_id"]').append('<option value="'+ value.id +'">' + value._name + '</option>');
 
                         });
                     },

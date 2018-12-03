@@ -6,7 +6,7 @@
                     <li class="{{ (Request::is('/') || Request::is('/') ? 'active' : '') }}" >
                         <a href="{{ url('/') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
                     </li>
-                    <li class="menu-title">Super Store</li><!-- /.menu-title -->                    
+                    <li class="menu-title">{{ env('APP_NAME', 'MENU') }}</li><!-- /.menu-title -->                    
                     <li class="menu-item-has-children dropdown {{ (Request::is('master-data') || Request::is('master-data/*') ? 'active' : '') }}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Master Data</a>
                         <ul class="sub-menu children dropdown-menu">

@@ -29,7 +29,7 @@ class ClubController extends Controller
      */
     public function index(Request $request)
     {   
-    	$leagues = League::query()->where('_active', '=' , '1')->get();
+    	$leagues = League::get();
         return view('clubs.index')->with(compact('leagues', 'request'));
     }
 

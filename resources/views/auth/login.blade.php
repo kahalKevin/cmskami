@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Superstrore CMS - Login</title>
+    <title>{{ env('APP_NAME', 'CMS') }} - Login</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -35,31 +35,23 @@
         <div class="container">
             <div class="login-content">
                 <div class="login-logo">
-                    <a href="index.html">
-                        <h1><b>SuperStore <strong>CMS</strong></b></h1>
-                        <!-- <img class="align-content" src="images/logo.png" alt=""> -->
-                    </a>
+                    <h1><b>{{ env('APP_NAME', 'CMS') }}</strong></b></h1>
                 </div>
                 <div class="login-form">
+                    @if ($errors->has('failed'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ $errors->first('failed') }}
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                     @csrf            
                         <div class="form-group">
                             <label>Email address</label>
                             <input id="_email" type="email" class="form-control{{ $errors->has('_email') ? ' is-invalid' : '' }}" name="_email" value="{{ old('_email') }}" required autofocus placeholder="Email">
-                            @if ($errors->has('_email'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('_email') }}</strong>
-                                </span>
-                            @endif
                         </div>
                         <div class="form-group">
                             <label>Password</label>
                             <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="Password">
-                            @if ($errors->has('password'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif
                         </div>
                         <div class="checkbox">
                             <label class="pull-right">

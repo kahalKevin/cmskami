@@ -63,7 +63,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="_name" class="control-label mb-1">Name</label>
-                                        <input id="_name" name="_name" type="text" class="form-control" value="{{ isset($product) ? $product->_name : '' }}" placeholder="">
+                                        <input id="_name" name="_name" type="text" class="form-control source-slug" value="{{ isset($product) ? $product->_name : '' }}" placeholder="">
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                 <div class="col-12  ">
                                     <div class="form-group">
                                         <label for="_slug" class="control-label mb-1">Slug</label>
-                                        <input id="_slug" name="_slug" type="text" class="form-control" value="{{ isset($product) ? $product->_slug : '' }}" placeholder="">
+                                        <input id="_slug" name="_slug" type="text" class="form-control dest-slug" value="{{ isset($product) ? $product->_slug : '' }}" placeholder="" readonly>
                                     </div>
                                 </div>
                             </div>                    

@@ -74,7 +74,8 @@
                                 <label for="club_id" class="control-label mb-1">Club</label>
                                 <select class="form-control" name="club_id">
                                     <option>--Club--</option>
-                              </select>
+                                </select>
+                                <p class="text-danger no-club-message d-none">No club in the league.</p>
                             </div>
                         </div>
                     </div>
@@ -83,7 +84,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="_name" class="control-label mb-1">Name</label>
-                                <input id="_name" name="_name" type="text" class="form-control" value="{{ isset($players) ? $players->_name : '' }}" placeholder="">
+                                <input id="_name" name="_name" type="text" class="form-control hashtag" value="{{ isset($players) ? $players->_name : '' }}" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -112,7 +113,7 @@
                         </div>
                     </div>                                         
                     <div>
-                        <button type="submit" class="btn btn-success"><strong>{{ isset($players) ? 'Update' : 'Create' }}</strong></button>
+                        <button type="submit" class="btn btn-success btn-submit"><strong>{{ isset($players) ? 'Update' : 'Create' }}</strong></button>
                     </div>                
                 {!! Form::close() !!}
             </div>
@@ -137,12 +138,17 @@
                     success:function(data) {
 
                         $('select[name="club_id"]').empty();
-
-                        $.each(data, function(key, value){
-
-                            $('select[name="club_id"]').append('<option value="'+ key +'">' + value + '</option>');
-
-                        });
+                        
+                        if (data.length > 0) {
+                            $('.no-club-message').addClass('d-none');
+                            $('.btn-submit').attr('disabled', false);
+                            $.each(data, function(key, value){
+                                $('select[name="club_id"]').append('<option value="'+ value.id +'">' + value._name + '</option>');
+                            });   
+                        } else {
+                            $('.no-club-message').removeClass('d-none');
+                            $('.btn-submit').attr('disabled', true);
+                        }
                     },
                     complete: function(){
                         $('#loader').css("visibility", "hidden");

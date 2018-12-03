@@ -1,7 +1,7 @@
 @extends('layouts.admin_template')
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>    
         <script type="text/javascript" src="{{ asset("/assets/admin/assets/js/lib/moment/moment.js")}}"></script>
         <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/daterangepicker.css")}}">
@@ -137,17 +137,17 @@
     $(document).ready(function() {
         $('.dateRangePicker').daterangepicker({
         autoUpdateInput: false,
-        timePicker: true,
+        timePicker: false,
             startDate: moment().startOf('hour'),
             endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
-              format: 'YYYY-MM-DD HH:mm:ss',
+              format: 'YYYY-MM-DD',
               cancelLabel: 'Clear'
             }
         });
     });
     $('.dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
     });
 
     $('.dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
