@@ -60,8 +60,8 @@
 	</div>
 	<div class="row">    
 	    <div align="right" class="col-sm-12">
-	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export Excel</strong></button>
-	        <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button>
+	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export</strong></button>
+	        <!-- <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button> -->
 	    </div>
 	    <div class="col-sm-12">
 	        <div class="card">  
@@ -90,7 +90,12 @@
             'copyHtml5',
             'excelHtml5',
             'csvHtml5',
-            'pdfHtml5'
+             {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+                titleAttr : 'PDF'
+             }
         ],
 	                 processing: true,
 	                 serverSide: true,

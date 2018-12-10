@@ -110,7 +110,7 @@
                           {
                             mRender: function (data, type, row) {
                                 var confirmUrl = "";
-                                if(row._name == "CHECKOUT"){
+                                if(row._name == "PAID BY BUYER"){
                                   confirmUrl = '<a href="javascript:checkConfirmOrder('+ row.id +');" class="btn btn-success"role="button">Confirm Order<a> ';
                                 }
                                 return '<center>' +

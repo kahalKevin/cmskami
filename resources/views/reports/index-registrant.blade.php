@@ -9,7 +9,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-        
 
         <script src={{ asset("/assets/admin/assets/js/moment.min.js")}}></script>
         <link rel="stylesheet" href="{{ asset("/assets/admin/assets/css/daterangepicker.css")}}">
@@ -37,7 +36,7 @@
 	                  <div class="row form-group">
 	                      <div class="col col-md-3"><label for="_period" class=" form-control-label">Period</label></div>
 	                      <div class="col-11 col-md-8"><input id="" name="_period" class="form-control dateRangePicker" value="{{ $request->_period ? $request->_period : '' }}" autocomplete="false"></div>
-	                  </div>                  
+	                  </div>
 	                  <div class="row form-group">
 	                      <div class="col col-md-3"><label for="verified" class=" form-control-label">Verified</label></div>
 	                      <div class="col-12 col-md-9">
@@ -81,8 +80,8 @@
 	</div>
 	<div class="row">    
 	    <div align="right" class="col-sm-12">
-	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export Excel</strong></button>
-	        <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button>
+	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export</strong></button>
+	        <!-- <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button> -->
 	    </div>
 	    <div class="col-sm-12">
 	        <div class="card">  
@@ -116,7 +115,12 @@
             'copyHtml5',
             'excelHtml5',
             'csvHtml5',
-            'pdfHtml5'
+             {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+                titleAttr : 'PDF'
+             }
         ],
 	                 processing: true,
 	                 serverSide: true,
