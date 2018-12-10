@@ -109,7 +109,6 @@ class SizeController extends Controller
         $size = Size::find($id);
         $size->delete();
         \Session::flash('flash_message', 'You have just delete '. $size->_name);
-        return redirect()->route("sizes.index");          
     }
 
     public function loadData(Request $request)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Model\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 use Illuminate\Http\Request;
@@ -43,9 +44,28 @@ class LoginController extends Controller
     {
         return '_email';
     }
+
     public function logout(Request $request) {
         Auth::logout();
         return redirect('/login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('_email', 'password');
+        $user = User::where('_email', '=', $credentials['_email'])->first();
+
+        if (Auth::attempt(['_email' => $credentials['_email'], 'password' => $credentials['password'], '_active' => '1'])) {
+            return redirect('/');
+        } 
+
+        $message = $user['_active'] == '1' ? 'Wrong email or password !' : 'Your user inactive. please contact administrator';
+        
+        $errors = [
+            'failed' => $message
+        ];
+        
+        return redirect()->back()->withErrors($errors);
     }
  
     public function authenticated(Request $request, $user)

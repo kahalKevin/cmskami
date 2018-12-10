@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Redirect;
 use Datatables;
 use Auth;
+use Carbon\CarbonPeriod;
 
 class AdsInventoryController extends Controller
 {    
@@ -59,6 +60,7 @@ class AdsInventoryController extends Controller
     public function index(Request $request)
     {
         $banner_types = Type::query()->where('category_id', 34)->get();
+        
         return view('adsbanner.index')->with(compact('banner_types', 'request'));
     }
 
@@ -69,8 +71,19 @@ class AdsInventoryController extends Controller
      */
     public function create()
     {
+        $disabled_dates = [];
         $banner_types = Type::query()->where('category_id', 34)->get();
-        return view('adsbanner.create')->with(compact('banner_types'));
+        $ads_banner = AdsBanner::get();
+
+        foreach ($ads_banner as $ads) {
+            $periods = CarbonPeriod::create(date('Y-m-d', strtotime($ads->_start_date)), date('Y-m-d', strtotime($ads->_end_date)));
+
+            foreach ($periods as $key => $period) {
+                $disabled_dates[] = $period->format('m/d/Y');
+            }
+        }
+
+        return view('adsbanner.create')->with(compact('banner_types', 'disabled_dates'));
     }
 
     /**
@@ -82,8 +95,9 @@ class AdsInventoryController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-                '_period' => 'required|between:41,41',
+                '_period' => 'required',
         ]);
+
         $dateSeparated = explode(" - ", $request->_period);
         $request->merge(['_start_date' => $dateSeparated[0]]);
         $request->merge(['_end_date' => $dateSeparated[1]]);
@@ -158,7 +172,7 @@ class AdsInventoryController extends Controller
     {
         $adsbanners = AdsBanner::find($id);
         $banner_types = Type::query()->where('category_id', 34)->get();
-        $period = $adsbanners->_start_date . ' - ' . $adsbanners->_end_date;
+        $period = date("Y-m-d", strtotime($adsbanners->_start_date)) . ' - ' . date("Y-m-d", strtotime($adsbanners->_end_date));
         return view('adsbanner.edit')->with(compact('banner_types', 'adsbanners', 'period'));
     }
 
@@ -172,7 +186,7 @@ class AdsInventoryController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
-                '_period' => 'required|between:41,41',
+                '_period' => 'required',
         ]);
         $dateSeparated = explode(" - ", $request->_period);
         $request->merge(['_start_date' => $dateSeparated[0]]);
@@ -210,7 +224,7 @@ class AdsInventoryController extends Controller
         }
 
         $adsbanner->save();
-        \Session::flash('flash_message','You have just update '. $adsbanner->_image_real_name);
+        \Session::flash('flash_message','You have just update '. $adsbanner->_title);
         return redirect()->route("adsInventory.index");
     }
 

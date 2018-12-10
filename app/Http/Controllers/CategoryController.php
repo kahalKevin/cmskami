@@ -11,7 +11,7 @@ use App\Http\Model\ProductTag as ProductTag;
 use App\Http\Model\Type as Type;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 use Redirect;
 use Datatables;
 use Auth;
@@ -88,7 +88,7 @@ class CategoryController extends Controller
         
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just created new Category');
-        Redis::del(env('REDIS_PREFIX').':categories');
+        Cache::forget('navigation');
         return redirect()->route("category.index"); 
     }
 
@@ -159,7 +159,7 @@ class CategoryController extends Controller
         $category->save();
         //PUT HERE AFTER YOU SAVE
         \Session::flash('flash_message','You have just update '. $category->_name);
-        Redis::del(env('REDIS_PREFIX').':categories');
+        Cache::forget('navigation');
         return redirect()->route("category.index");                
     }
 
@@ -186,7 +186,7 @@ class CategoryController extends Controller
         $category_deleted = Category::find($id);
         $category_deleted->delete();
         \Session::flash('flash_message','You have just delete '. $category_deleted->_name);
-        Redis::del(env('REDIS_PREFIX').':categories');
+        Cache::forget('navigation');
     }
 
     public function destroyProduct($id)

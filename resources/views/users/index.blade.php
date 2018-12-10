@@ -1,7 +1,7 @@
 @extends('layouts.admin_template')
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>    
 
 @section('content')
@@ -13,7 +13,13 @@
 </div>
 <hr>
 @if(Session::has('flash_message'))
-    <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>
+    <div class="alert alert-success">
+        <span class="glyphicon glyphicon-ok"></span>
+        <em> {!! session('flash_message') !!}</em>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 @endif
 <div class="row">
     <div class="col-lg-6">

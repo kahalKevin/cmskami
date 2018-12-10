@@ -86,5 +86,32 @@ jQuery(document).ready(function($) {
 		
 	});
   
- 
+	$('.source-slug').on('keyup', function () {
+		var str = $(this).val();
+		var dest = $('.dest-slug');
+		var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+		var to   = "aaaaeeeeiiiioooouuuunc------";
+
+        str = str.replace(/^\s+|\s+$/g, ''); // trim
+		str = str.toLowerCase();
+	
+		// remove accents, swap ñ for n, etc
+		for (var i=0, l=from.length ; i<l ; i++) {
+			str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+		}
+
+		str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+			.replace(/\s+/g, '-') // collapse whitespace and replace by -
+			.replace(/-+/g, '-'); // collapse dashes
+
+        dest.val(str);
+	});
+	
+	$('.hashtag').on('keyup', function() {
+		var str = $(this).val().replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+			return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
+		}).replace(/\s+/g, '');
+		
+		$(this).val(str);
+	});
 });

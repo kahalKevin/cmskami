@@ -12,7 +12,10 @@ class Order extends Model {
     protected $table = 'fe_tx_order';
     protected $dates = ['delete_at'];
     
+    public $incrementing = false;
+
     protected $fillable = [
+        'id',
         'cart_no',
         'guest_no',
     	'user_id',

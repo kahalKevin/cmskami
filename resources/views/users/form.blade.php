@@ -29,7 +29,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="_email" class="control-label mb-1">Email</label>
-                                <input id="_email" name="_email" type="text" class="form-control" value="{{ isset($users) ? $users->_email : '' }}" placeholder="">
+                                <input id="_email" name="_email" type="text" class="form-control" value="{{ isset($users) ? $users->_email : '' }}" {{ isset($users) ? "readonly" : "" }} />
                             </div>
                         </div>
                     </div>

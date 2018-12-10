@@ -99,7 +99,7 @@
 		                            </div>
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Freight Provider</label>
-		                            	<input type="text" id="" disabled="" value="{{ $freight_provider->_name }}" class="form-control">
+		                            	<input type="text" id="" disabled="" value="{{ isset($freight_provider) ? $freight_provider->_name : '' }}" class="form-control">
 		                            </div>
 									<div class="form-group">
 		                            	<label for="" class=" form-control-label">Freight Amount</label>
@@ -150,7 +150,7 @@
 		                        <div class="tab-pane fade" id="custom-nav-payment-info" role="tabpanel" aria-labelledby="custom-nav-payment-info-tab">
 		                            <div class="form-group">
 		                            	<label for="" class=" form-control-label">Method</label>
-		                            	<input type="text" id="" 1 disabled="" value="{{ $payment_method->_name }}"	class="form-control">
+		                            	<input type="text" id="" 1 disabled="" value="{{ isset($payment_method) ? $payment_method->_name : '' }}"	class="form-control">
 		                            </div>
 									<div class="form-group">
 		                            	<label for="" class=" form-control-label">Pg. Provider</label>

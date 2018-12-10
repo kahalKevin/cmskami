@@ -110,7 +110,7 @@
                             <div class="form-group">
                                 <label for="_desc" class="control-label mb-1">Period</label>
                                     <div>
-                                        <input type='text' id='_period' name="_period" value="{{ isset($period) ? $period : '' }}"  class="form-control dateRangePickerAds" />
+                                        <input type='text' id='_period' name="_period" value="{{ isset($period) ? $period : '' }}"  class="form-control dateRangePickerAds" {{ isset($period) ? 'readonly' : '' }} />
                                     </div>
                             </div>
                         </div>
@@ -148,19 +148,50 @@
 <script type="text/javascript">
     var $ = jQuery;
     $(document).ready(function() {
+        @php 
+            if (!isset($period))  {
+                echo "var disabledArr = " . json_encode($disabled_dates) . ";";
+            } else {
+                echo "var disabledArr = [];";
+            }
+        @endphp
+
         $('.dateRangePickerAds').daterangepicker({
         autoUpdateInput: false,
-        timePicker: true,
+        timePicker: false,
             startDate: moment().startOf('hour'),
             endDate: moment().startOf('hour').add(32, 'hour'),
+            minDate: new Date(),
+            isInvalidDate: function(arg){
+                console.log(arg);
+
+                // Prepare the date comparision
+                var thisMonth = arg._d.getMonth()+1;   // Months are 0 based
+                if (thisMonth<10){
+                    thisMonth = "0"+thisMonth; // Leading 0
+                }
+                var thisDate = arg._d.getDate();
+                if (thisDate<10){
+                    thisDate = "0"+thisDate; // Leading 0
+                }
+                var thisYear = arg._d.getYear()+1900;   // Years are 1900 based
+
+                var thisCompare = thisMonth +"/"+ thisDate +"/"+ thisYear;
+                console.log(thisCompare);
+
+                if($.inArray(thisCompare,disabledArr)!=-1){
+                    console.log("      ^--------- DATE FOUND HERE");
+                    return true;
+                }
+            },
             locale: {
-              format: 'YYYY-MM-DD HH:mm:ss',
+              format: 'YYYY-MM-DD',
               cancelLabel: 'Clear'
             }
         });
     });
     $('.dateRangePickerAds').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
     });
 
     $('.dateRangePickerAds').on('cancel.daterangepicker', function(ev, picker) {
