@@ -122,8 +122,8 @@
 	</div>
 	<div class="row">    
 	    <div id="notprint2" align="right" class="col-sm-12">
-	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export Excel</strong></button>
-	        <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button>
+	        <button type="button" class="btn btn-success" onclick="location.href=''"><strong>Export</strong></button>
+	        <!-- <button type="button" class="btn btn-primary" onclick="printDiv('printable')"><strong>Print</strong></button> -->
 	    </div>
 	    <div class="col-sm-12">
 	        <div class="card">  
@@ -135,10 +135,9 @@
 	                 <thead>
 	                    <tr>
 	                      <th width="5%">ID</th>
-	                      <th width="10%">Email</th>
 	                      <th width="10%">Order ID</th>
 	                      <th width="10%">Date</th>
-	                      <th width="15%">Emil</th>                      
+	                      <th width="15%">Email</th>                      
 	                      <th width="15%">Total Item</th>
 	                      <th width="5%">Total Weight</th>
 	                      <th width="5%">Item Amount</th>
@@ -149,7 +148,7 @@
 	              </table>
 	          <script>
 	            $(function() {
-	                 var url_clean = "{{ url('report/registrant/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
+	                 var url_clean = "{{ url('report/sales/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
 	                 var fix_url = url_clean.replace(/&amp;/g, '&');
 	                  $('#table').DataTable({
 	                  dom: 'Bfrtip',
@@ -159,7 +158,10 @@
              'csvHtml5',
              {
                 extend: 'pdfHtml5',
-                messageTop: "Total Amount : \nTotal freight : \nGrand Total : "
+                // messageTop: "Total Amount : \nTotal freight : \nGrand Total : ",
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+                titleAttr : 'PDF'
              }
          ],
 	                  processing: true,

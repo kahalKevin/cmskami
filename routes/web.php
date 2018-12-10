@@ -34,6 +34,7 @@ Route::get('category-product/product-gallery/load-data', 'ProductGalleryControll
 Route::get('order-management/incoming-order/load-data', 'OrderController@loadDataIncomingOrder');
 Route::get('order-management/order/load-data', 'OrderController@loadData');
 
+Route::get('report/sales/load-data', 'ReportController@loadDataSales');
 Route::get('report/registrant/load-data', 'ReportController@loadDataRegistrant');
 Route::get('report/subscriber/load-data', 'ReportController@loadDataSubscriber');
 Route::get('report/contact-us/load-data', 'ReportController@loadDataContactUs');

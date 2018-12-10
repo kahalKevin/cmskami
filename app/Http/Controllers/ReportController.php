@@ -6,6 +6,7 @@ use App\Http\Model\FEUser as FEUser;
 use App\Http\Model\UserSubscriber as UserSubscriber; 
 use App\Http\Model\TxContactUs as TxContactUs;
 use App\Http\Model\Type as Type;
+use App\Http\Model\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
@@ -36,8 +37,8 @@ class ReportController extends Controller
 
     public function indexSubscriber(Request $request)
     {
-        $total_user_subscribe = UserSubscriber::where('_unsub_at', '!=', null)->count();
-        $total_user_unsubscribe = UserSubscriber::where('_unsub_at', '=', null)->count();
+        $total_user_subscribe = UserSubscriber::where('_unsub_at', '=', null)->count();
+        $total_user_unsubscribe = UserSubscriber::where('_unsub_at', '!=', null)->count();
 
         return view('reports.index-subscriber')->with(compact('total_user_subscribe', 'total_user_unsubscribe', 'request'));
     } 
@@ -78,8 +79,8 @@ class ReportController extends Controller
 
         if(isset($request->period)) {
             $period = explode(" - ", $request->period);
-            $query = $query->where('created_at', '>=' , $period[0]);
-            $query = $query->where('created_at', '<=' , $period[1]);
+            $query = $query->where('fe_tm_user.created_at', '>=' , $period[0]);
+            $query = $query->where('fe_tm_user.created_at', '<=' , $period[1]);
         }
 
         if(isset($request->verified) && $request->verified != 'all') {
@@ -96,14 +97,51 @@ class ReportController extends Controller
         return Datatables::of($query)->addIndexColumn()->make(true);
     }
 
+
+    public function loadDataSales(Request $request)
+    {   
+        $query = Order::leftJoin('sys_type','fe_tx_order.gender_id','sys_type.id')
+            ->select(
+                  'fe_tm_user.id',
+                  'fe_tm_user._email',
+                  'fe_tm_user._verified_email_at',
+                  'fe_tm_user._phone',
+                  'fe_tm_user._verified_phone_at',
+                  'fe_tm_user._first_name',
+                  'fe_tm_user._last_name',
+                  'sys_type._name AS gender',
+                  'fe_tm_user._dob',
+                  'fe_tm_user.created_at'              
+            );
+
+        if(isset($request->period)) {
+            $period = explode(" - ", $request->period);
+            $query = $query->where('created_at', '>=' , $period[0]);
+            $query = $query->where('created_at', '<=' , $period[1]);
+        }
+
+        if(isset($request->verified) && $request->verified != 'all') {
+            if($request->verified == 'email'){
+                $query = $query->where('_verified_email_at', '!=', null);
+            } else if($request->verified == 'phone'){
+                $query = $query->where('_verified_phone_at', '!=', null);
+            } else {
+                $query = $query->where('_verified_phone_at', '=', null);
+                $query = $query->where('_verified_email_at', '=', null);
+            }
+        }
+
+        return Datatables::of($query)->addIndexColumn()->make(true);
+    }    
+
     public function loadDataSubscriber(Request $request)
     {   
         $query = UserSubscriber::query();
 
         if(isset($request->period)) {
             $period = explode(" - ", $request->period);
-            $query = $query->where('create_date', '>=' , $period[0]);
-            $query = $query->where('create_date', '<=' , $period[1]);
+            $query = $query->where('created_at', '>=' , $period[0]);
+            $query = $query->where('created_at', '<=' , $period[1]);
         }
 
         if(isset($request->status) && $request->status != 'all') {
@@ -114,7 +152,16 @@ class ReportController extends Controller
             }
         }                          
 
-        return Datatables::of($query)->addIndexColumn()->make(true);
+        return Datatables::of($query)
+            ->addColumn('status', function($subscribe) {
+                    if ($subscribe->_unsub_at == null) {
+                        return 'Subscribed';
+                    } else {
+                        return 'Unsubsribed';
+                    }
+                }
+            )
+            ->addIndexColumn()->make(true);
     } 
 
     public function loadDataContactUs(Request $request)

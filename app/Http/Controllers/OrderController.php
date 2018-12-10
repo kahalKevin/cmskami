@@ -207,7 +207,7 @@ class OrderController extends Controller
             $query = $query->where('fe_tx_order.created_at', '<=' , $period[1]);
         }
          
-        $query = $query->where('fe_tx_order.status_id', '=' , 'STATUSORDER0');
+        $query = $query->where('fe_tx_order.status_id', '=' , 'STATUSORDER1');
                 
         return Datatables::of($query
         )->addIndexColumn()->make(true);
