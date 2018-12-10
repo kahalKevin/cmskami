@@ -86,12 +86,12 @@
 	            		<tr>
 	            			<td width="50%"><h4><strong>Total Item</strong></h4></td>
 	            			<td width="25%"><h4><strong>:</strong></h4></td>
-	            			<td width="25%" align="right"><h4><strong>Value</strong></h4></td>
+	            			<td width="25%" align="right"><h4><strong>{{ $item }}</strong></h4></td>
 	            		</tr>
 	            		<tr>
 	            			<td><h4><strong>Total Weight (Gram)</strong></h4></td>
 	            			<td><h4><strong>:</strong></h4></td>
-	            			<td align="right"><h4><strong>Value </strong></h4></td>
+	            			<td align="right"><h4><strong>{{ $weight }} </strong></h4></td>
 	            		</tr>	      
 	               		<tr>
 	            			<td colspan="3"><hr></td>	            			
@@ -99,12 +99,12 @@
 						<tr>
 	            			<td width="50%"><h4><strong>Total Item Amount</strong></h4></td>
 	            			<td width="25%"><h4><strong>:</strong></h4></td>
-	            			<td width="25%" align="right"><h4><strong>Value</strong></h4></td>
+	            			<td width="25%" align="right"><h4><strong>{{ number_format($total_item_amount, 0, '.', '.') }}</strong></h4></td>
 	            		</tr>
 	            		<tr>
 	            			<td><h4><strong>Total Freight Amount</strong></h4></td>
 	            			<td><h4><strong>:</strong></h4></td>
-	            			<td align="right"><h4><strong>Value </strong></h4></td>
+	            			<td align="right"><h4><strong>{{ number_format($total_weigth_amount, 0, '.', '.') }} </strong></h4></td>
 	            		</tr>	      
 	               		<tr>
 	            			<td colspan="2"><hr></td>
@@ -113,7 +113,7 @@
 	            		<tr>
 	            			<td width="50%"><h4><strong>Grand Total Amount</strong></h4></td>
 	            			<td width="25%"><h4><strong>:</strong></h4></td>
-	            			<td width="25%" align="right"><h4><strong>Value</strong></h4></td>
+	            			<td width="25%" align="right"><h4><strong>{{ number_format($grand_total, 0, '.', '.') }}</strong></h4></td>
 	            		</tr>	            		      		
 	            	</table>
 	            </div>            
@@ -134,7 +134,6 @@
 	              <table class="table table-bordered" id="table" class="col-sm-12">
 	                 <thead>
 	                    <tr>
-	                      <th width="5%">ID</th>
 	                      <th width="10%">Order ID</th>
 	                      <th width="10%">Date</th>
 	                      <th width="15%">Email</th>                      
@@ -148,39 +147,37 @@
 	              </table>
 	          <script>
 	            $(function() {
-	                 var url_clean = "{{ url('report/sales/load-data?period='. $request->_period.'&verified='. $request->verified) }}"
-	                 var fix_url = url_clean.replace(/&amp;/g, '&');
-	                  $('#table').DataTable({
-	                  dom: 'Bfrtip',
-         buttons: [
-             'copyHtml5',
-             'excelHtml5',
-             'csvHtml5',
-             {
-                extend: 'pdfHtml5',
-                // messageTop: "Total Amount : \nTotal freight : \nGrand Total : ",
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                titleAttr : 'PDF'
-             }
-         ],
-	                  processing: true,
-	                  serverSide: true,
-	                  searching: false,
-	                  ajax: fix_url,
-	                  columns: [
+	                 	var url_clean = "{{ url('report/sales/load-data?period='. $request->_period.'&status='. $request->status.'&paymentMethod='. $request->paymentMethod.'&keyword='. $request->keyword) }}"
+	                 	var fix_url = url_clean.replace(/&amp;/g, '&');
+	                  	$('#table').DataTable({
+	                  	dom: 'Bfrtip',
+				        buttons: [
+				             'copyHtml5',
+				             'excelHtml5',
+				             'csvHtml5',
+				             {
+				                extend: 'pdfHtml5',
+				                // messageTop: "Total Amount : \nTotal freight : \nGrand Total : ",
+				                orientation: 'landscape',
+				                pageSize: 'LEGAL',
+				                titleAttr : 'PDF'
+				             }
+				         ],
+	                  	processing: true,
+	                  	serverSide: true,
+	                  	searching: false,
+	                  	ajax: fix_url,
+	                  	columns: [
 	                           { data: 'id', defaultContent: '' },
+	                           { data: 'row_last_modified', name: 'row_last_modified' },
 	                           { data: '_email', name: '_email' },
-	                           { data: '_verified_email_at', name: '_verified_email_at' },
-	                           { data: '_phone', name: '_phone' },
-							   { data: '_verified_phone_at', name: '_verified_phone_at' },
-	                           { data: '_first_name', name: '_first_name' },
-	                           { data: '_last_name', name: '_last_name' },
-	                           { data: 'gender', name: 'gender' },
-	                           { data: '_dob', name: '_dob' },
-	                           { data: 'created_at', name: 'created_at' }
-	                        ]
-	               });
+	                           { data: '_qty', name: '_qty' },
+							   { data: 'product_weight', name: 'product_weight' },
+	                           { data: '_total_amount', name: '_total_amount' },
+	                           { data: '_freight_amount', name: '_freight_amount' },
+	                           { data: '_grand_total', name: '_grand_total' }
+	                    ]
+	               	});
 	            });
 	          </script>
 	          </div>        
